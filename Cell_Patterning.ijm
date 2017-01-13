@@ -1,12 +1,13 @@
-//A simple tool that tracks objects by selecting them with the magic wand
-//A new image stack of the tracked object is also recorded
-//Place Follicle_Track_Tool.ijm in /fiji/macros/toolsets and restart
+//A simple tool to aid in the manual tracking of flourescently labelled cells 
+//during pattern fomrtion
+
+//Place Cell_Patterning.ijm in /fiji/macros/toolsets and restart
+
 //Clicking the first button initialises the analysis tool
 //Click the second to track a cell
 //Use the third to adda new track
-//Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
 
-///120416 MODIFIED TO ANLYZE HAIRFOLLICLE FORMATION
+//Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
 
 //Global variables for cell tracking
 var gtrack = 1;
