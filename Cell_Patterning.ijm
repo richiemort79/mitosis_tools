@@ -64,7 +64,7 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	cal = Dialog.getNumber();
 	sample = Dialog.getNumber();
 
-//Promt user to define the hair follicle condensate in the finale frame
+//prompt user to define the hair follicle condensate in the final frame
 	setSlice(slices);
 	run("Select None");
 	setTool("oval");
@@ -188,7 +188,7 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	roiManager("Select All");
 	roiManager("Measure");
 
-//make sure there are enough rois in the manager
+//make sure there are enough ROIS in the manager
 	cells = roiManager("count");
 
 	if (sample > cells) {sample = cells;} else {}
@@ -236,7 +236,7 @@ macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D
 
 run("Restore Selection");
 
-//check there is a selection if not ask to press the new track button
+//check there is a selection, if not ask to press the new track button
     type = selectionType();
     if (type == -1) {exit("There is no selection have you initialised the image?");}
 
@@ -268,11 +268,11 @@ run("Restore Selection");
     run("Colors...", "foreground=white background=white selection=red");
     run("Enlarge...", "enlarge=15");
 
-	//get nearest distance to the skeleton
+//get nearest distance to the skeleton
 	get_s_dist(x, y, xpoints, ypoints);
     dist = shortest;
     
-    //is the xy position within the condensate at this time point?
+//is the xy position within the condensate at this time point?
     inside = "No";
 
     for (i = 0; i < x_values.length; i++) {
@@ -288,12 +288,11 @@ run("Restore Selection");
 
 macro "Add Track Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9fDa3Da4Da7Da8Db0Db1Db2Db3Db4Db8DbcDc0Dc1Dc2Dc3Dc4DcbDccDcdDd0Dd1Dd2Dd3Dd4DdcDe0De1De2De3De4De5Df0Df1Df2Df3Df4Df5DffC37dD7fC777D45C69dD47D65C777D08D09D0aD18D1aD29D2aD35D44D56D80D81D90D92Da0Da1Da2C48dD6bDb7Dc7Dd6Cbd9DabDbaDbbDceDecC8beD5eD75C582DaeDeaDeeC48dD4dD6cDc8Dd7Dd8De6De7Df6C999D27D36D37D38D54D63D64D72D73D74D83C7aeD48D4bC8b6DadDbeDdbDdeDebDedC59dDb5Dc5C9beD57C361D9dC48dD4eDf7C888D28D46D55D82C69eDa5C58dD6dDc6Dd5Cbd9DacC684Dc9C8aeD49D4aD58D59C8b6DdaC59dD67C9beD5bD5cD5dD85C47dD4fD7eDe8Df8Df9C69eD76D86Da6C8beD5aD66C473De9C7aeD5fD6fC8beD95C473D9cC6aeD6eCdebDcaC8a6DaaC59eD96Db6C59eD4cC695Da9Db9C584D9bDd9C8b6DbdDddC685D9a"
 {
-
 //You do not need to click it before you start tracking the first cell as gtrack is set to 1 in the first instance
 
 	run("Colors...", "foreground=white background=black selection=cyan");
 
-//randomly make a slection from manager
+//randomly make a selection from manager
     if (roi_n < (roiManager("count"))-1) {
     	roi_n = roi_n + 1;
     } 
@@ -312,12 +311,10 @@ macro "Add Track Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11
 macro "Get Class and Trim Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D18D19D1aD1bD1cD1dD1eD1fD20D21D24D25D26D27D28D29D2aD2bD2eD2fD30D3fD40D41D44D45D46D47D48D49D4aD4bD4eD4fD50D51D52D53D54D55D56D57D58D59D5aD5bD5cD5dD5eD5fD60D61D62D64D65D67D68D6aD6bD6dD6eD6fD70D71D72D74D75D77D78D7aD7bD7dD7eD7fD80D81D82D84D85D87D88D8aD8bD8dD8eD8fD90D91D92D94D95D97D98D9aD9bD9dD9eD9fDa0Da1Da2Da4Da5Da7Da8DaaDabDadDaeDafDb0Db1Db2Db4Db5Db7Db8DbaDbbDbdDbeDbfDc0Dc1Dc2Dc4Dc5Dc6Dc7Dc8DcaDcbDccDcdDceDcfDd0Dd1Dd2Dd4Dd5Dd6Dd7Dd8DdaDdbDdcDddDdeDdfDe0De1De2De3De4De5De6De7De8De9DeaDebDecDedDeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC59dD3bC555D96CbbbDd3C333D6cDa9C7aeD38C666D93Dd9CdefD2dD3eD4dC222D8cDc9C69dD3dC666D66D76Da3Db3C9ceD33C444D69D79Da6C8beD36C777D63D73D83CeefD31C111D9cDacC69dD2cD4cC555D86Dc3C9beD23D34D43C333D99C7aeD37C222D7cDb9C69eD39D3cC8beD32D35CfffD22D42C69eD3aC444D89Db6"
 {
 
-//If the results table is empty prompt for a results table
-
+//if the results table is empty prompt for a results table
 	if (isOpen("Results")) {
 		getClass();
 	}
-
 		else {
 			waitForUser("There is no Results table open please select a tracking table or press cancel");
 			table = getInfo("window.name");
@@ -327,7 +324,6 @@ macro "Get Class and Trim Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0b
 			open(tdir+Image+"Tracking_Results.xls");
 			getClass();
 		}
-
 	updateResults();
 
 	Dialog.create("Trim Data?");
@@ -389,7 +385,7 @@ macro "Add Summary Stats Action Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD
 
 macro "Vector Windows Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D13D14D15D19D1aD1eD1fD20D21D22D23D24D25D29D2eD2fD30D31D32D33D34D35D36D39D3cD3dD3eD3fD40D41D42D43D44D45D46D47D4bD4cD4dD4eD4fD50D51D52D53D54D55D56D57D5aD5bD5cD5dD5eD5fD60D61D62D63D64D65D66D6bD6cD6dD6eD6fD70D71D72D73D74D7cD7dD7eD7fD80D81D82D83D84D88D8cD8dD8eD8fD90D91D92D93D94D9cD9dD9eD9fDa0Da1Da2Da3Da4Da5DaaDabDacDadDaeDafDb0Db1Db2Db3Db4Db8Db9DbaDbbDbcDbdDbeDbfDc0Dc1Dc2Dc3Dc8Dc9DcaDcbDccDcdDceDcfDd0Dd9DdaDdbDdcDddDdeDdfDe0De4De5De9DeaDebDecDedDeeDefDf0Df4Df5Df9DfaDfbDfcDfdDfeDffC47bDe6Cf55D18D27CabdD97Dd8Df6Cf33D7aD89D99C78bDa6Cf88D98CaceD0bD75D95Ce23D8bD9aC58cD1dCf66D38Cc9bD58Cf55Df2C8acDe7Cf99De2CfddD37D6aCc79Db7C48cD2bD2cD77D87Cf66D07D16CaceD3bCf44De3C69dD3aCf99D08D26D8aDc4CcdfD78Ce34Db6C58dD0cD85Cf77D28D48CfbbD17Dd1Cf55Dd2De1C9bdDd6CfaaDf3CfeeDd5C47bDe8Df7C79bD96C58dD1bD76Cf67D7bDa8Dd4CcabDc6Cf55D79Dd3C9adD1cCf99D06Ca8bD49Cf66D9bCaceD0dD2dCf45D69Dc5C79cDc7CddfD67Cc56D59CfccDb5C9bdD86CfaaDf1CeffD2aC58cD68C8adD4aCe55Da7CabdDf8CfffDa9"
 {
-//loops through tracking data and calcualting the angle (from com of follicle) euclidean distance and speed for specified window lengths
+//loops through the tracking data and calculates the angle (from COM of follicle) euclidean distance and speed for specified window lengths
 
 //prompt for the window size required and confirm the time step - prompt for calibration of image
 	Dialog.create("Please specicify the window size");
@@ -427,7 +423,6 @@ macro "Vector Windows Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D
 			track_number = Array.concat(track_number, t_num);	
 		}
 	}	
-
 
 	for (i=0; i<track_number.length; i++){
 		values_x = newArray();
@@ -495,7 +490,6 @@ macro "Vector Windows Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D
 		}	
 	
 //loop through all results and write the window
-
 		for (r=0; r<nResults; r++) {
 			setResult("Most Recent Window (min)", r, (step*time_step));
 		}
@@ -510,8 +504,8 @@ macro "Vector Windows Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D
 		}
 
 	}
-//get speed
 
+//get speed
 	for (c=0; c<nResults; c++) {
 		if (getResult(prefix+"-min Acc. Dis (um)", c)>0) {
 			d = getResult(prefix+"-min Acc. Dis (um)", c);
@@ -521,7 +515,6 @@ macro "Vector Windows Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D
 	}	
 
 //get the persistence
-
 	for (h=0; h<nResults; h++) {
 		persistence = (getResult(prefix+"-min Euc. Dis (um)", h)) / (getResult(prefix+"-min Acc. Dis (um)", h));
 		setResult(prefix+"-min Pers", h, persistence);
@@ -590,10 +583,9 @@ function law_of_cosines(xarray,yarray){
 }
 
 function deleteChosenRows(column, tag, column2, class) {
-//deletes rows that have tag in column unless they have class in column 2
+//deletes rows that have "tag" in column unless they have "class" in column 2
 
-//get the column headings in array
-	
+//get the column headings in array	
 	headings = split(String.getResultsHeadings);
 
 	if (isOpen("Log")) {
@@ -629,9 +621,9 @@ function deleteChosenRows(column, tag, column2, class) {
 }
 
 function getClass() {
-//Determines the starting and finishing position of a track and classifies as "Yes-Yes", "Yes-No", "No-No", "No-Yes"
+//determines the starting and finishing position of a track and classifies as "Yes-Yes", "Yes-No", "No-No", "No-Yes"
 
-//Is there a results table containing the column heading Inside?
+//is there a results table containing the column heading Inside?
 
 	if (isOpen("Results") && getResultString("Inside?", 0) == "Yes" || getResultString("Inside?", 0) == "No") {
 
@@ -673,10 +665,9 @@ function getClass() {
 }
 
 function myFisherYates(array) {
-//Randomise an array 
+//randomise an array 
     
-    if(array.length!=0) { 
-        
+    if(array.length!=0) {       
         for (i=0;i<array.length ;i++) { 
             j = floor(random()*(i+1)); 
             temp1 = array[i]; temp2 = array[j]; 
@@ -686,7 +677,7 @@ function myFisherYates(array) {
 } 
 
 function get_skel_xy(image) {
-//Return an array of x and y positions for the skeleton of a selection
+//return an array of x and y positions for the skeleton of a selection
 
 	selectWindow(image);
 //check for a selection
@@ -714,7 +705,7 @@ function get_skel_xy(image) {
 	}
 
 function get_s_dist(x, y, xvalues, yvalues) {
-//Get the shortest distance between x,y and the values in xarray, yarray
+//get the shortest distance between x,y and the values in xarray, yarray
 	
 //check the arrays are the same length
 	if (xvalues.length == yvalues.length){	
@@ -736,7 +727,7 @@ function get_s_dist(x, y, xvalues, yvalues) {
 }
 
 function basic_summary() {
-//Basic summary of the tracking results into the same results table
+//basic summary of the tracking results into the same results table
 
 //get the track numbers in an array to use as the index
 	track_number = newArray();
@@ -748,7 +739,7 @@ function basic_summary() {
 		}
 	}
 
-//Get number of tracks (nTracks)
+//get number of tracks (nTracks)
 	nTracks = track_number.length;
 
 //get track lengths in array and write to results
@@ -771,7 +762,7 @@ function basic_summary() {
 		}
 	}
 
-//calculated accumulated distance for each step
+//calculate accumulated distance for each step
 	for (i=0; i<nResults; i++) {
 		if (i==0) {//stops it looping between the first/last value if there is only 1 track
 			dist = 0;
@@ -802,7 +793,7 @@ function basic_summary() {
   		}
 	}
 
-//euclidean for each step
+//calculate euclidean distance for each step
 	for (j=0; j<track_number.length; j++){
 		values_x = newArray();
 		values_y = newArray();
@@ -833,7 +824,7 @@ function basic_summary() {
     	}
 	}
 
-///persistence
+//calculate persistence
 	euclidean = newArray();
 	accumulated = newArray();
 	persistence= newArray();
@@ -852,7 +843,7 @@ function basic_summary() {
 }
 
 function per_track_summary() {
-//Summarises each individual track stats into new summary table
+//summarises each individual track into a new summary table
 
 //draws the summary table
 	requires("1.41g");
@@ -878,7 +869,7 @@ function per_track_summary() {
 		}
 	}
 
-//Get number of tracks (nTracks)
+//get number of tracks (nTracks)
 	nTracks = track_number.length;
 
 //get the accumulated distance euclidean distance for each track into arrays
@@ -898,7 +889,7 @@ function per_track_summary() {
 			}	
 		}
 
-//calculate euclidean distance for track
+//calculate the euclidean distance for track
 		final_value=values_x.length-1;
 		x = values_x[0];
 		y = values_y[0];
@@ -910,7 +901,7 @@ function per_track_summary() {
 		euclidean_distances = Array.concat(euclidean_distances, eucdist);
 	}
 
-//Total distance = max value in Acc. Dist (um)
+//total distance = max value in Acc. Dist (um)
 	total_distance = 0;
 	distance = 0;
 
@@ -992,7 +983,7 @@ function per_track_summary() {
 	number  = 0;
 
 	for (i=0; i<track_number.length; i++){
-	//exclude tracks with less than 10 timepoints	
+//exclude tracks with less than 10 timepoints	
 		if ((track_lengths[i]/time_step) < 10) {
 			print("Track "+track_number[i]+" excluded < 10 steps");
 		} 
@@ -1003,7 +994,7 @@ function per_track_summary() {
 }
 
 function summarise_windows() {
-//Summarises the stats for the windows into a seperate table
+//summarises the stats for the windows into a separate table
 
 //draws the summary table
     requires("1.41g");
@@ -1035,7 +1026,7 @@ function summarise_windows() {
 	t_steps = window/time_step;
 
 	max_length = 0;
-//Max steps
+//max steps
 	for (a=0; a<nResults(); a++) {
 		if (getResult("T_Length",a)>max_length){
 			max_length = getResult("T_Length",a);
@@ -1061,10 +1052,10 @@ function summarise_windows() {
 //generate an array with the classes in
 	classes = newArray(" No-No", " No-Yes");
 
-//summarise All
+//summarise all
 	for (z=0; z<classes.length; z++) {
 		for (j=0; j<hour_index.length; j++) {
-//specifiy your arrays here
+//specify your arrays here
 			n_tracks = 0;//number of tracks in the window
 			e_angle = newArray();
 			e_distance = newArray();
@@ -1076,7 +1067,7 @@ function summarise_windows() {
 	
 			for (k=0; k<nResults; k++) {
 				if ((getResultString("Class", k) == classes[z]) && (getResult("-Index", k) == hour_index[j])) {
-//poulate your arrays here
+//populate your arrays here
 				test_angle1 = getResult(window+"-min Euc. Angle", k);
 				test_angle2 = d2s(test_angle1, 0);
 				if (test_angle2 == "NaN") {} else {e_angle = Array.concat(e_angle, test_angle1);}
