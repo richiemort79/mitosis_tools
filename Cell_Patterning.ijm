@@ -54,7 +54,6 @@ run("Options...", "iterations=1 count=1 black edm=Overwrite do=Nothing");
 
 //remove scale if any
 	run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
-
 	Image = getTitle();
 	dir = File.directory();
 	gtrack = 1;
@@ -73,7 +72,8 @@ run("Options...", "iterations=1 count=1 black edm=Overwrite do=Nothing");
 	sample = Dialog.getNumber();
 
 //prompt user to define the hair follicle condensate in the final frame
-	setSlice(slices);
+	run("Colors...", "foreground=white background=black selection=cyan");
+	setSlice(frames);
 	run("Select None");
 	setTool("oval");
 	waitForUser("Select Condensate", "Please outline the condensate and press OK");
