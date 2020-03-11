@@ -47,6 +47,14 @@ number = 1;
 count = 1;
 getDimensions(width, height, channels, slices, frames);
 
+if (frames > slices) {
+	run("Re-order Hyperstack ...", "channels=[Channels (c)] slices=[Frames (t)] frames=[Slices (z)]");
+	}
+
+getDimensions(width, height, channels, slices, frames);
+
+print(slices);
+
 //prompt for calibration of image
 Dialog.create("Please set calibration values");
 Dialog.addNumber("Time Step (min):", 10);
@@ -62,6 +70,8 @@ setSlice(slices);
 run("Select None");
 setTool("oval");
 waitForUser("Select Condensate", "Please outline the condensate and press OK");
+
+print("Saving snapshots.........................................................................................");
 
 //save snapshots frame 1 and last
 run("Select None");
