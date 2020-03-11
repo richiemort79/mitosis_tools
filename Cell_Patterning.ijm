@@ -53,7 +53,7 @@ if (frames > slices) {
 
 getDimensions(width, height, channels, slices, frames);
 
-print(slices);
+//print(slices);
 
 //prompt for calibration of image
 Dialog.create("Please set calibration values");
@@ -70,8 +70,6 @@ setSlice(slices);
 run("Select None");
 setTool("oval");
 waitForUser("Select Condensate", "Please outline the condensate and press OK");
-
-print("Saving snapshots.........................................................................................");
 
 //save snapshots frame 1 and last
 run("Select None");
@@ -170,25 +168,26 @@ run("Gaussian Blur...", "sigma=1");
 run("Find Maxima...", "noise=15 output=[Point Selection]");
 getDimensions(width, height, channels, slices, frames);
 
+newImage("Untitled", "8-bit black", width, height, 1);
+run("Colors...", "foreground=white background=black selection=cyan");
+run("Restore Selection");
+run("Draw");
+run("Make Binary");
+//run("Invert");//////////////////////////////////////////////////////////////////////////////////////////////////CHECK YOU NEED THIS LINE ON YOUR SETUP
+run("Analyze Particles...", "exclude add");
+
+selectWindow(Image);
+roiManager("Show All");
+
 if (isOpen("Clipboard")){
 	selectWindow("Clipboard");
 	run("Close");
 }
 
-newImage("Untitled", "8-bit black", width, height, 1);
-run("Colors...", "foreground=white background=black selection=cyan");
-run("Restore Selection");
-run("Draw");
-//run("Invert");//////////////////////////////////////////////////////////////////////////////////////////////////CHECK YOU NEED THIS LINE ON YOUR SETUP
-run("Analyze Particles...", "exclude add");
-
 if (isOpen("Untitled")){
 	selectWindow("Untitled");
 	run("Close");
 }
-
-selectWindow(Image);
-roiManager("Show All");
 
 //randomly select 20 ROIS
 run("Set Measurements...", "center redirect=None decimal=4");
