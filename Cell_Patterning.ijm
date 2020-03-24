@@ -70,10 +70,12 @@ getDimensions(width, height, channels, slices, frames);
 Dialog.create("Please set calibration values");
 Dialog.addNumber("Time Step (min):", 10);
 Dialog.addNumber("Scale (um/px):", 0.619);
+Dialog.addCheckbox("Find random cells?", false);
 Dialog.addNumber("Number of random cells:", 5);
 Dialog.show();
 time_step = Dialog.getNumber();
 cal = Dialog.getNumber();
+rcells = Dialog.getChoice();
 sample = Dialog.getNumber();
 
 //Promt user to define the hair follicle condensate in the finale frame
@@ -162,90 +164,91 @@ if (isOpen("Log")){
 	run("Close");
 }
 
-//add all cells to the manager
-if (isOpen("ROI Manager")){
-	selectWindow("ROI Manager");
-	run("Close");
-}
+if (rcells == true) {
+	//add all cells to the manager in order to choose random cells
+	if (isOpen("ROI Manager")){
+		selectWindow("ROI Manager");
+		run("Close");
+	}
 
-run("Select None");
-setSlice(1);
-run("Select All");
-run("Copy");
-run("Select None");
-run("Internal Clipboard");
-run("8-bit");
-run("Gaussian Blur...", "sigma=1");
-run("Find Maxima...", "noise=15 output=[Point Selection]");
-getDimensions(width, height, channels, slices, frames);
+	run("Select None");
+	setSlice(1);
+	run("Select All");
+	run("Copy");
+	run("Select None");
+	run("Internal Clipboard");
+	run("8-bit");
+	run("Gaussian Blur...", "sigma=1");
+	run("Find Maxima...", "noise=15 output=[Point Selection]");
+	getDimensions(width, height, channels, slices, frames);
 
-newImage("Untitled", "8-bit black", width, height, 1);
-run("Colors...", "foreground=white background=black selection=cyan");
-run("Restore Selection");
-run("Draw");
-run("Make Binary");
-//run("Invert");//////////////////////////////////////////////////////////////////////////////////////////////////CHECK YOU NEED THIS LINE ON YOUR SETUP
-run("Analyze Particles...", "exclude add");
+	newImage("Untitled", "8-bit black", width, height, 1);
+	run("Colors...", "foreground=white background=black selection=cyan");
+	run("Restore Selection");
+	run("Draw");
+	run("Make Binary");
+	//run("Invert");//////////////////////////////////////////////////////////////////////////////////////////////////CHECK YOU NEED THIS LINE ON YOUR SETUP
+	run("Analyze Particles...", "exclude add");
 
-selectWindow(Image);
-roiManager("Show All");
+	selectWindow(Image);
+	roiManager("Show All");
 
-if (isOpen("Clipboard")){
-	selectWindow("Clipboard");
-	run("Close");
-}
+	if (isOpen("Clipboard")){
+		selectWindow("Clipboard");
+		run("Close");
+	}
 
-if (isOpen("Untitled")){
-	selectWindow("Untitled");
-	run("Close");
-}
+	if (isOpen("Untitled")){
+		selectWindow("Untitled");
+		run("Close");
+	}
 
 //randomly select 20 ROIS
-run("Set Measurements...", "center redirect=None decimal=4");
-roiManager("Select All");
-roiManager("Measure");
+	run("Set Measurements...", "center redirect=None decimal=4");
+	roiManager("Select All");
+	roiManager("Measure");
 
 
 //make sure there are enough rois in the manager
-cells = roiManager("count");
+	cells = roiManager("count");
 
-if (sample > cells) {sample = cells;} else {}
+	if (sample > cells) {sample = cells;} else {}
 
 
-if (isOpen("ROI Manager")) {
-    selectWindow("ROI Manager");
-    run("Close");
-          }
+	if (isOpen("ROI Manager")) {
+    	selectWindow("ROI Manager");
+    	run("Close");
+    	      }
 
-k=0; 
-n=nResults(); 
-rois=newArray(n); 
+	k=0; 
+	n=nResults(); 
+	rois=newArray(n); 
 
-for(i=0;i<n;i++) 
-    rois[i]=k++; 
+	for(i=0;i<n;i++) 
+    	rois[i]=k++; 
 
 //need to check that if there are less tham roi_n cells it just seslects all
-myFisherYates(rois); 
+	myFisherYates(rois); 
 
-count=1; 
-for(i=0;i<sample;i++) { 
-    x = getResult("XM", rois[i]); 
-    y = getResult("YM", rois[i]); 
-    makePoint(x, y);
-    roiManager("Add");  
-   } 
+	count=1; 
+	for(i=0;i<sample;i++) { 
+   		x = getResult("XM", rois[i]); 
+    	y = getResult("YM", rois[i]); 
+ 	   makePoint(x, y);
+ 	   roiManager("Add");  
+ 	  } 
 
-if (isOpen("Results")) {
-    selectWindow("Results");
-    run("Close");
-          }
+	if (isOpen("Results")) {
+  	  selectWindow("Results");
+  	  run("Close");
+     	     }
 
-selectWindow(Image);
-roiManager("Show None");
+	selectWindow(Image);
+	roiManager("Show None");
 
-roiManager("Select", roi_n);/////is it missing the first one?
-run("Enlarge...", "enlarge=10");
-
+	roiManager("Select", roi_n);/////is it missing the first one?
+	run("Enlarge...", "enlarge=10");
+}
 }
 macro "Manual Track MB Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9aD9bD9cD9dD9eD9fDa3Da4Da7Da8Da9DaaDabDacDadDaeDafDb0Db1Db2Db3Db4Db8Db9DbaDbbDbcDbdDbeDbfDc0Dc1Dc2Dc3Dc4Dc9DcaDcbDccDcdDceDcfDd0Dd1Dd2Dd3Dd4Dd9DdaDdbDdcDddDdeDdfDe0De1De2De3De4De5DeaDebDecDedDeeDefDf0Df1Df2Df3Df4Df5DfbDfcDfdDfeDffC48dD4dD6cDc8Dd7Dd8De6De7Df6C37dD7fDfaC69eDa5C777D45C58dD6dDc6Dd5C999D27D36D37D38D54D63D64D72D73D74D83C8beD5eD75C48dD6bDb7Dc7Dd6C48dD4eDf7C8aeD49D4aD58D59C888D28D46D55D82C59eD96Db6C9beD57C47dD4fD7eDe8De9Df8Df9C7aeD5fD6fC59dDb5Dc5C8beD5aD66C69dD47D65C69eD76D86Da6C9beD5bD5cD5dD85C7aeD48D4bC59eD4cC59dD67C8beD95C6aeD6e" 
 {
