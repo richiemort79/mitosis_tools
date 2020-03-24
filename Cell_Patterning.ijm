@@ -11,6 +11,10 @@
 
 //Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
 
+//24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
+//Adding a track changes the source number 1, 2, 3, 4 etc
+//Adding a mitosis splits the track into daughters a and b (1a, 1b, 1aa, 1bb)
+
 //Global variables for cell tracking
 var gtrack = 1;
 var number = 1;
