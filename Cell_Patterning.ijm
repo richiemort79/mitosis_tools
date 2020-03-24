@@ -257,7 +257,8 @@ run("Restore Selection");
     if (type == -1) {exit("There is no selection have you initialised the image?");}
 
 //some variables
-    track = gtrack;
+    track = toString(gtrack)+toString(daughter);
+    print(track);
     slice = getSliceNumber();
     
     width = getWidth();
@@ -274,7 +275,7 @@ run("Restore Selection");
             run("Table...", "name="+title2+" width=1000 height=300");
         else
             run("New... ", "name="+title2+" type=Table width=250 height=600");
-        print(f, "\\Headings: \tImage_ID\tTrack\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
+        print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
     }
     run("Colors...", "foreground=white background=white selection=cyan");
     autoUpdate(false);
@@ -295,8 +296,8 @@ run("Restore Selection");
        if ((x == x_values[i]) && (y == y_values[i])) {inside = "Yes";} else {}
     //print("inside = "+inside);
     }
-
-    print(f,(number++)+"\t"+Image+"\t"+(track)+"\t"+(slice)+"\t"+(x)+"\t"+(y)+"\t"+com_roi_x+"\t"+com_roi_y+"\t"+dist+"\t"+inside);
+	
+    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+(is_seed)+"\t"+(slice)+"\t"+(x)+"\t"+(y)+"\t"+com_roi_x+"\t"+com_roi_y+"\t"+dist+"\t"+inside);
         
 //advance to next slice
         run("Next Slice [>]");
@@ -320,18 +321,38 @@ run("Colors...", "foreground=white background=black selection=cyan");
 	run("Enlarge...", "enlarge=10");	
     setTool("rectangle");
     gtrack++;
+
+	is_seed = true;//are we on a seed track or a daughter track?
+ 	daughter = "";//this is either a or b and is appended to gtrack in the results table
+	mitosis_frame = "";//remember when the mitosis happened so we can go back to track the second daughter
+
     waitForUser("A new track ("+gtrack+") has been added to the analysis. Please select the tracking button and continue");
     setSlice(1);
 }
 
 
 //You do not need to click it before you start tracking as gtrack is set to 1 in the first instance.
-macro "Add Mitosis Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9fDa3Da4Da7Da8Db0Db1Db2Db3Db4Db8DbcDc0Dc1Dc2Dc3Dc4DcbDccDcdDd0Dd1Dd2Dd3Dd4DdcDe0De1De2De3De4De5Df0Df1Df2Df3Df4Df5DffC37dD7fC777D45C69dD47D65C777D08D09D0aD18D1aD29D2aD35D44D56D80D81D90D92Da0Da1Da2C48dD6bDb7Dc7Dd6Cbd9DabDbaDbbDceDecC8beD5eD75C582DaeDeaDeeC48dD4dD6cDc8Dd7Dd8De6De7Df6C999D27D36D37D38D54D63D64D72D73D74D83C7aeD48D4bC8b6DadDbeDdbDdeDebDedC59dDb5Dc5C9beD57C361D9dC48dD4eDf7C888D28D46D55D82C69eDa5C58dD6dDc6Dd5Cbd9DacC684Dc9C8aeD49D4aD58D59C8b6DdaC59dD67C9beD5bD5cD5dD85C47dD4fD7eDe8Df8Df9C69eD76D86Da6C8beD5aD66C473De9C7aeD5fD6fC8beD95C473D9cC6aeD6eCdebDcaC8a6DaaC59eD96Db6C59eD4cC695Da9Db9C584D9bDd9C8b6DbdDddC685D9a"{
+macro "Add Mitosis Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0cD0dD0eD0fD10D11D12D13D14D15D16D17D1dD1eD1fD20D21D22D23D24D25D2eD2fD30D31D32D33D34D3fD40D41D42D43D44D4fD50D51D52D53D5eD5fD60D69D6aD6dD6eD6fD70D78D79D7aD7cD7dD7eD7fD80D88D89D8aD8cD8dD8eD8fD90D99D9aD9dD9eD9fDa0Da1Da2Da3DaeDafDb0Db1Db2Db3Db4DbfDc0Dc1Dc2Dc3Dc4DcfDd0Dd1Dd2Dd3Dd4Dd5DdeDdfDe0De1De2De3De4De5De6De7DedDeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfcDfdDfeDffC8c8Db7C6b6D27D28CacaDfbC494DaaC9c9D98C7b7D6bD72D76D82D83CbeaD3eC483D63Dd7Dd8C9c8D56D57D66Db9DbaDcaDcbDccC7b7D46D77D86CadaD1cC6a6D67D95DdcC9d9D48C8c7D1bD2cD4dCefeD35C373D61C8c8D2bD3dDc9C7b6D58D65D9bDabDacDbdDc7DcdCadaD4bD4cDceC695DebC9c9DddC7c7D73CcdcDa4C484D94C8a7Db5CbdaD7bC6a6DdbCad9D38D39D49D4aD6cCefeD18D19D1aDeaC372D71C8b8DecC6b6D29Cad9D3aC5a5D36C9c9D47D9cDbbDbcC8c7D5bCbdbDd6C484Dd9CadaD2dD3bD3cD5dCefeDe9C373D62D93Da5Dc6CadaD8bC6a5D5aCac9D68DadC8c7D5cD74D84D85Da6Da7CeeeDc5De8C494D55Da9DdaCbdaD4eC7a7D87C272D81D92C8c8D37D75D96Db8Dc8C594D64CbebD0bC6a5D97Da8Db6CdedD54C9b8D45C7b6D2aCadaDbeC5a5D59CcecD26"{
 
+	is_seed = false;//are we on a seed track or a daughter track?
+	if (daughter == "") {
+		daughter = "a";//this is either a or b and is appended to gtrack in the results table
+	} else if (daughter == "a"){
+		daughter = "b";
+	}
+	mslice = getSliceNumber();
+	mitosis_frame = mslice;//remember when the mitosis happened so we can go back to track the second daughter
+	//need to remember location and get an ROI for that
+	
 }
 
-macro "Switch Daughter Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9fDa3Da4Da7Da8Db0Db1Db2Db3Db4Db8DbcDc0Dc1Dc2Dc3Dc4DcbDccDcdDd0Dd1Dd2Dd3Dd4DdcDe0De1De2De3De4De5Df0Df1Df2Df3Df4Df5DffC37dD7fC777D45C69dD47D65C777D08D09D0aD18D1aD29D2aD35D44D56D80D81D90D92Da0Da1Da2C48dD6bDb7Dc7Dd6Cbd9DabDbaDbbDceDecC8beD5eD75C582DaeDeaDeeC48dD4dD6cDc8Dd7Dd8De6De7Df6C999D27D36D37D38D54D63D64D72D73D74D83C7aeD48D4bC8b6DadDbeDdbDdeDebDedC59dDb5Dc5C9beD57C361D9dC48dD4eDf7C888D28D46D55D82C69eDa5C58dD6dDc6Dd5Cbd9DacC684Dc9C8aeD49D4aD58D59C8b6DdaC59dD67C9beD5bD5cD5dD85C47dD4fD7eDe8Df8Df9C69eD76D86Da6C8beD5aD66C473De9C7aeD5fD6fC8beD95C473D9cC6aeD6eCdebDcaC8a6DaaC59eD96Db6C59eD4cC695Da9Db9C584D9bDd9C8b6DbdDddC685D9a"{
-
+macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD10D11D12D17D18D1dD1eD1fD20D21D22D27D28D2dD2eD2fD30D31D32D3dD3eD3fD40D41D42D4dD4eD4fD50D51D52D5dD5eD5fD60D61D62D6dD6eD6fD70D71D72D7dD7eD7fD80D81D82D8dD8eD8fD90D91D92D9dD9eD9fDa0Da1Da7Da8DaeDafDb0DbfDc0Dc1DceDcfDd0Dd1Dd2Dd7Dd8DddDdeDdfDe0De1De2De3De6De7De8De9DecDedDeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC594D0bD29D39Db2CcdcD6cDadC9c9DabDbbDcaC383D4cCcebD14D15D24D34C8b8D8bC5a4D0aD93CdedDa2CacaD47D48C464DdcCcdcD97C7b7D5aC695De5CdedD63C9c9D8aD9aC474DdbC9c8D1aD1bD2aD84D85D95Da4Da5Db4DcbC6a5Da3CfffD37D38CbdaD66D67C362Db8C7b6D83D86C595D59D75D76D96Db6Dc6Dd4Dd5C9c9D54D94D9bDaaDbaC483D2cC8c8D2bD3aDb5Dc4C5a5D09D26CadaD56D78C474Dc8DccC7b7Db3C695D5cD7bCac9D65D73C584D6aD99C6b5D03D04D05D13D23D33CbebD25D35D44D45C262Da9C6a6D49D5bD64D74C595Dd6C483D3cD87Da6C8c8D3bD4aDc5C5a4D19CadaD68D79C373D88C8a8D7cC484DdaC6b5D06CbdbD55C373Db7C494D0cD1cC6a5D16D43C474DeaDebC8b7D46D53Db1Cad9D7aC585Dc9C252D9cC6a6Dd3C8c8D4bC474D8cDd9C8b7D69D77D89C575DbeC363DacC484D58C363DcdC5a5D36C484Dc7C6a5Dc3C373D6bC585Db9C696De4C7b7D57C6a6Dc2"{
+	setSlice(1);
+	if (daughter == "") {
+		daughter = "a";//this is either a or b and is appended to gtrack in the results table
+	} else if (daughter == "a"){
+		daughter = "b";
+	}
 }
 
 macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1eD1fD20D24D27D2aD2eD2fD30D34D37D3aD3eD3fD40D44D45D46D47D48D49D4aD4bD4cD4eD4fD50D54D57D5aD5eD5fD60D64D67D6aD6eD6fD70D74D75D76D77D78D79D7aD7bD7cD7eD7fD80D84D87D8aD8eD8fD90D94D97D9aD9eD9fDa0Da4Da5Da6Da7Da8Da9DaaDabDacDaeDafDb0Db4Db7DbaDbeDbfDc0Dc4Dc7DcaDceDcfDd0Dd4Dd5Dd6Dd7Dd8Dd9DdaDdbDdcDdeDdfDe0DeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC9c9D5bD6bD85D86D95D96C7adD07D61C8adD02C68bD3dCf66D2bD3bC6beD28D29D38D39D55D56D65D66CbcdD01De1C58bDe6CdddD25D26D35D36D58D59D68D69D8bD9bDb5Db6DbbDc5Dc6DcbC7adD03D04D05D06D13D21D23D31D33D41D43D51D53D63D73D83D93Da3Db3Dc3Dd3C9beD12D22D32D42D52D62D72D82D92Da2Db2Dc2Dd2C79cD91Da1Cfd6Db8Db9Dc8Dc9CeeeD8cD9cDbcDccC57aD9dC89cDd1C9bdD11C69cD0aD0bD0cDb1Dc1Cfa7D88D89D98D99CdedD5cD6cC68bD4dDe4De5C79dD08D09D71D81CfccD2cD3cC68cD1dC58bD5dC57bD6dD7dD8dDe7De8De9C8acD0dDedC68cD2dDe3C79cDe2"{
