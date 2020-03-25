@@ -25,8 +25,9 @@ var mitosis_frame = "";//remember when the mitosis happened so we can go back to
 var mitosis_x = 0; //remember where the mitosis happened so we can go back to track the second daughter
 var mitosis_y = 0; //remember where the mitosis happened so we can go back to track the second daughter
 
-var x = 0;//posiiton you click
-var y = 0;//position you click
+var posx = 0;//posiiton you click
+var posy = 0;//position you click
+
 var count = 1;
 var Image = "";
 var x_values = newArray();
@@ -120,6 +121,9 @@ run("Close");
 //get the skeleton of the condensate
 selectWindow(Image);
 run("Restore Selection");
+
+//print("Line 125");
+//exit();
 
 if (isOpen("Results")){
 	selectWindow("Results");
@@ -269,7 +273,7 @@ run("Restore Selection");
 
 //some variables
 	track = toString(gtrack)+toString(daughter);
-    print(track);
+    //print(track);
     slice = getSliceNumber();
     
     
@@ -300,6 +304,12 @@ run("Restore Selection");
     run("Enlarge...", "enlarge=15");
 
 	//get nearest distance to the skeleton
+	posx = x;
+	posy = y;
+	Array.print(xpoints);
+	Array.print(ypoints);
+	print(x);
+	print(y);
 	get_s_dist(x, y, xpoints, ypoints);
     dist = shortest;
     
@@ -311,7 +321,7 @@ run("Restore Selection");
     //print("inside = "+inside);
     }
 	
-    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+(x)+"\t"+(y)+"\t"+com_roi_x+"\t"+com_roi_y+"\t"+dist+"\t"+inside);
+    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside);
         
 //advance to next slice
         run("Next Slice [>]");
@@ -364,8 +374,8 @@ macro "Add Mitosis Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0cD0dD0eD
 	}
 	mslice = getSliceNumber();
 	mitosis_frame = mslice;//remember when the mitosis happened so we can go back to track the second daughter
-	mitosis_x =	x;
-	mitosis_y = y;
+	mitosis_x =	posx;
+	mitosis_y = posy;
 	//need to remember location and get an ROI for that
 	
 }
@@ -826,7 +836,7 @@ function get_skel_xy(image) {
 		}
 		
 		else {
-			//run("Colors...", "foreground=white background=white selection=cyan");
+			run("Colors...", "foreground=white background=white selection=cyan");
 			getDimensions(width, height, channels, slices, frames);
 			newImage("skeleton", "8-bit black", width, height, 1);
 			run("Restore Selection");
