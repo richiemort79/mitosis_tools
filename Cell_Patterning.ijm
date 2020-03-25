@@ -55,6 +55,7 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 
 //remove scale if any
 run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
+run("Remove Overlay");
 
 Image = getTitle();
 dir = File.directory();
@@ -255,6 +256,7 @@ if (rcells == true) {
 	run("Enlarge...", "enlarge=10");
 }
 run("Select None");
+setSlice(1);
 }
 macro "Manual Track MB Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9aD9bD9cD9dD9eD9fDa3Da4Da7Da8Da9DaaDabDacDadDaeDafDb0Db1Db2Db3Db4Db8Db9DbaDbbDbcDbdDbeDbfDc0Dc1Dc2Dc3Dc4Dc9DcaDcbDccDcdDceDcfDd0Dd1Dd2Dd3Dd4Dd9DdaDdbDdcDddDdeDdfDe0De1De2De3De4De5DeaDebDecDedDeeDefDf0Df1Df2Df3Df4Df5DfbDfcDfdDfeDffC48dD4dD6cDc8Dd7Dd8De6De7Df6C37dD7fDfaC69eDa5C777D45C58dD6dDc6Dd5C999D27D36D37D38D54D63D64D72D73D74D83C8beD5eD75C48dD6bDb7Dc7Dd6C48dD4eDf7C8aeD49D4aD58D59C888D28D46D55D82C59eD96Db6C9beD57C47dD4fD7eDe8De9Df8Df9C7aeD5fD6fC59dDb5Dc5C8beD5aD66C69dD47D65C69eD76D86Da6C9beD5bD5cD5dD85C7aeD48D4bC59eD4cC59dD67C8beD95C6aeD6e" 
 {
@@ -287,14 +289,14 @@ run("Restore Selection");
             run("New... ", "name="+title2+" type=Table width=250 height=600");
         print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
     }
-    run("Colors...", "foreground=white background=white selection=cyan");
+    //run("Colors...", "foreground=white background=white selection=cyan");
     autoUpdate(false);
     getCursorLoc(x, y, z, flags);
     makePoint(x, y);
     makeOval(x,y,5,5);
 	run("Add Selection...");
     wait(250);
-    run("Colors...", "foreground=white background=white selection=red");
+    //run("Colors...", "foreground=white background=white selection=red");
     run("Enlarge...", "enlarge=15");
 
 	//get nearest distance to the skeleton
@@ -367,7 +369,7 @@ macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD
 	run("Colors...", "foreground=white background=white selection=yellow");
 	setSlice(mitosis_frame);
 	makePoint(mitosis_x, mitosis_y);
-    run("Colors...", "foreground=white background=white selection=cyan");
+    //run("Colors...", "foreground=white background=white selection=cyan");
     run("Enlarge...", "enlarge=15");
 
 	if (daughter == "") {
@@ -818,7 +820,7 @@ function get_skel_xy(image) {
 		}
 		
 		else {
-			run("Colors...", "foreground=white background=white selection=cyan");
+			//run("Colors...", "foreground=white background=white selection=cyan");
 			getDimensions(width, height, channels, slices, frames);
 			newImage("skeleton", "8-bit black", width, height, 1);
 			run("Restore Selection");
