@@ -63,6 +63,8 @@ dir = File.directory();
 gtrack = 1;
 number = 1;
 count = 1;
+daughter = "";
+
 getDimensions(width, height, channels, slices, frames);
 
 if (frames > slices) {
@@ -297,7 +299,7 @@ run("Restore Selection");
     autoUpdate(false);
     getCursorLoc(x, y, z, flags);
     makePoint(x, y);
-    makeOval(x,y,5,5);
+    makeOval(x,y,2,2);
 	run("Add Selection...");
     wait(250);
     //run("Colors...", "foreground=white background=white selection=red");
