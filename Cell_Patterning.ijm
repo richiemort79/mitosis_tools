@@ -323,11 +323,13 @@ run("Restore Selection");
 macro "Add Track Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9fDa3Da4Da7Da8Db0Db1Db2Db3Db4Db8DbcDc0Dc1Dc2Dc3Dc4DcbDccDcdDd0Dd1Dd2Dd3Dd4DdcDe0De1De2De3De4De5Df0Df1Df2Df3Df4Df5DffC37dD7fC777D45C69dD47D65C777D08D09D0aD18D1aD29D2aD35D44D56D80D81D90D92Da0Da1Da2C48dD6bDb7Dc7Dd6Cbd9DabDbaDbbDceDecC8beD5eD75C582DaeDeaDeeC48dD4dD6cDc8Dd7Dd8De6De7Df6C999D27D36D37D38D54D63D64D72D73D74D83C7aeD48D4bC8b6DadDbeDdbDdeDebDedC59dDb5Dc5C9beD57C361D9dC48dD4eDf7C888D28D46D55D82C69eDa5C58dD6dDc6Dd5Cbd9DacC684Dc9C8aeD49D4aD58D59C8b6DdaC59dD67C9beD5bD5cD5dD85C47dD4fD7eDe8Df8Df9C69eD76D86Da6C8beD5aD66C473De9C7aeD5fD6fC8beD95C473D9cC6aeD6eCdebDcaC8a6DaaC59eD96Db6C59eD4cC695Da9Db9C584D9bDd9C8b6DbdDddC685D9a"
 {
 run("Remove Overlay");
+run("Select None");
 run("Colors...", "foreground=white background=black selection=red");
+
+if (rcells == true) {
 //randomly make a slection from manager
-   
-	if (rcells = false) {}
-		else if ((roi_n < (roiManager("count"))-1)) {
+
+	if (roi_n < (roiManager("count"))-1) {
     		roi_n = roi_n + 1;
     		} 
     	   else {
@@ -336,12 +338,14 @@ run("Colors...", "foreground=white background=black selection=red");
 	
 	roiManager("Select", roi_n);
 	run("Enlarge...", "enlarge=10");	
-    setTool("rectangle");
+    //setTool("rectangle");
+}   
+ 
     gtrack++;
 
 	is_seed = true;//are we on a seed track or a daughter track?
  	daughter = "";//this is either a or b and is appended to gtrack in the results table
-	mitosis_frame = "";//remember when the mitosis happened so we can go back to track the second daughter
+	mitosis_frame = 0;//remember when the mitosis happened so we can go back to track the second daughter
 
     waitForUser("A new track ("+gtrack+") has been added to the analysis. Please select the tracking button and continue");
     setSlice(1);
