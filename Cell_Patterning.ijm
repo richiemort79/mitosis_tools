@@ -46,6 +46,7 @@ var ypoints =newArray();
 var angle = 0;
 var euc_dis = 0;
 var step = 6;//the size of the window in time steps
+var rcells =false;
 
 var dCmds = newMenu("Data Operations Menu Tool", newArray("Get Class and Trim", "Add Summary Stats", "Vector Windows", "Summarise Windows"));
 
@@ -325,7 +326,7 @@ macro "Add Track Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11
 run("Remove Overlay");
 run("Colors...", "foreground=white background=black selection=red");
 //randomly make a slection from manager
-    if (roi_n < (roiManager("count"))-1) {
+    if ((rcells = true)&&(roi_n < (roiManager("count"))-1)) {
     	roi_n = roi_n + 1;
     	} 
        else {
