@@ -298,12 +298,13 @@ run("Restore Selection");
     //run("Colors...", "foreground=white background=white selection=cyan");
     autoUpdate(false);
     getCursorLoc(x, y, z, flags);
-    makePoint(x, y);
-    makeOval(x,y,2,2);
+    //makePoint(x, y);
+    makeOval(x-1,y-1,3,3);
 	run("Add Selection...");
-    wait(250);
+	makePoint(x, y);
+    wait(300);
     //run("Colors...", "foreground=white background=white selection=red");
-    run("Enlarge...", "enlarge=15");
+    run("Enlarge...", "enlarge=5");
 
 	//get nearest distance to the skeleton
 	posx = x;
