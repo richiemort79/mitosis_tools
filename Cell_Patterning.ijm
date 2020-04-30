@@ -135,20 +135,10 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	selectWindow(Image);
 	run("Restore Selection");
 
-<<<<<<< HEAD
 	if (isOpen("Results")){
 		selectWindow("Results");
 		run("Close");
 	}
-=======
-//print("Line 125");
-//exit();
-
-if (isOpen("Results")){
-	selectWindow("Results");
-	run("Close");
-}
->>>>>>> testing
 
 //get all the x and y positions of the pixels in the selection 
 	getSelectionBounds(x0, y0, width, height); 
@@ -194,16 +184,13 @@ if (isOpen("Results")){
 		run("Close");
 	}
 
-<<<<<<< HEAD
-//add all cells to the manager
-=======
-if (rcells == true) {
+	if (rcells == true) {
 	//add all cells to the manager in order to choose random cells
->>>>>>> testing
-	if (isOpen("ROI Manager")){
-		selectWindow("ROI Manager");
-		run("Close");
-	}
+
+		if (isOpen("ROI Manager")){
+			selectWindow("ROI Manager");
+			run("Close");
+		}
 <<<<<<< HEAD
 
 	run("Select None");
