@@ -844,11 +844,11 @@ function basic_summary() {
 	track_number = newArray();
 	t_num = 0;
 	for (w=0; w<nResults; w++) {
-		if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
-			t_num = getResult("Track", w);
+		if ((getResultString("Track", w) != t_num)||(getResultString("Track", j) < t_num)) {
+			t_num = getResultString("Track", j);
 			track_number = Array.concat(track_number, t_num);	
+			}
 		}
-	}
 
 //get number of tracks (nTracks)
 	nTracks = track_number.length;
