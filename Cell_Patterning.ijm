@@ -858,7 +858,7 @@ function basic_summary() {
 	for (a=0; a<track_number.length; a++){
 		t_le = 0;
 		for (i=0; i<nResults; i++) {
-			if (getResult("Track",i) == track_number[a]) {
+			if (getResultString("Track",i) == track_number[a]) {
 				t_le = t_le +1;
 			}
 		}
@@ -867,8 +867,8 @@ function basic_summary() {
 
 	for (a=0; a<track_number.length; a++){
 		for (i=0; i<nResults; i++) {
-			if (getResult("Track",i) == track_number[a]) {
-				setResult("T_Length", i, track_lengths[a]);
+			if (getResultString("Track",i) == track_number[a]) {
+				setResultString("T_Length", i, track_lengths[a]);
 			}
 		}
 	}
@@ -880,7 +880,7 @@ function basic_summary() {
 			speed = 0;
 		}
 		else {
-			if (getResult("Track", i) == getResult("Track", i-1)) {
+			if (getResultString("Track", i) == getResultString("Track", i-1)) {
 				x = getResult("X", i);
 				y = getResult("Y", i);
 				x1 = getResult("X", i-1);
@@ -898,7 +898,7 @@ function basic_summary() {
 //sum the accumulated disances
 	setResult("Acc_Dist_(um)", 1 , 0);
 	for (i=0; i<nResults; i++) {
-		if (getResult("Track", i) == getResult("Track", i-1)) {
+		if (getResultString("Track", i) == getResultString("Track", i-1)) {
 			summed = (getResult("Distance_(um)", i) + getResult("Acc_Dist_(um)", i-1));
 			setResult("Acc_Dist_(um)", i, summed);
   		}
@@ -979,6 +979,7 @@ function per_track_summary() {
 			}
 		}
 
+//Array.print(track_number);
 
 //get number of tracks (nTracks)
 	nTracks = track_number.length;
@@ -1095,12 +1096,12 @@ function per_track_summary() {
 
 	for (i=0; i<track_number.length; i++){
 //exclude tracks with less than 10 timepoints
-		if ((track_lengths[i]/time_step) < 10) {
-			print("Track "+track_number[i]+" excluded < 10 steps");
-		} 
-			else {
-				print(f, (number++)+"\t"+(track_number[i])+"\t"+(track_lengths[i])+"\t"+(max_distances[i])+"\t"+(euclidean_distances[i])+"\t"+(track_persistence[i])+"\t"+(track_speed[i])+"\t"+(e_track_speed[i])+"\t"+track_class[i]+"\t"+(dist_com[i]));
-    		}
+//		if ((track_lengths[i]/time_step) < 1) {
+//			print("Track "+track_number[i]+" excluded < 10 steps");
+//		} 
+//			else {
+				print(f, (number++)+"\t"+toString(track_number[i])+"\t"+(track_lengths[i])+"\t"+(max_distances[i])+"\t"+(euclidean_distances[i])+"\t"+(track_persistence[i])+"\t"+(track_speed[i])+"\t"+(e_track_speed[i])+"\t"+track_class[i]+"\t"+(dist_com[i]));
+  //  		}
 	}
 }
 
