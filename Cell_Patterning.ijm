@@ -455,11 +455,12 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 			var flag = true;
 
 			for (j=0; j<nResults; j++){
-				if (getResult("Track", j) == track_number[i] && getResultString("Inside?", j) == "Yes") {flag = false;}
-				if (getResult("Track", j) == track_number[i] && !flag) {setResult("Flag", j, "Delete");}
+				if (getResultString("Track", j) == track_number[i] && getResultString("Inside?", j) == "Yes") {flag = false;}
+				if (getResultString("Track", j) == track_number[i] && !flag) {setResult("Flag", j, "Delete");}
 			}
 		}
 		updateResults();
+		
 //loop through and delete all the entries flagged "Delete"
 		deleteChosenRows("Flag", "Delete", "Class", "No-No");
 }
@@ -717,6 +718,13 @@ function deleteChosenRows(column, tag, column2, class) {
 	selectWindow("Log");
 	saveAs("Text", tdir+"Log.csv");
 	open(tdir+"Log.csv");
+
+	if (isOpen("Results")) {
+		selectWindow("Results");
+		run("Close");
+	}
+	
+	Table.rename("Log.csv", "Results");
 
 	if (isOpen("Log")) {
 		selectWindow("Log");
