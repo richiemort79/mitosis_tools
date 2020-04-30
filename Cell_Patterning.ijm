@@ -653,7 +653,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 
 function law_of_cosines(xarray,yarray){
 //Function to return the angle from two arrays - angle of interest must be at xarray[0], yarray[0]
-	
+
 //a distances
 	xd_a = xarray[0] - xarray[1];
 	yd_a = yarray[0] - yarray[1];
@@ -676,12 +676,10 @@ function law_of_cosines(xarray,yarray){
 			radian = acos(((a*a)+(b*b)-(c*c))/(2*(a*b)));
 			angle = radian*(180/PI);
 		}
-
 }
 
 function deleteChosenRows(column, tag, column2, class) {
 //deletes rows that have "tag" in column unless they have "class" in column 2
-
 //get the column headings in array	
 	headings = split(String.getResultsHeadings);
 
@@ -689,7 +687,6 @@ function deleteChosenRows(column, tag, column2, class) {
 		selectWindow("Log");
 		run("Close");
 	}
-
 	//print to log
 	Array.print(headings);
 
@@ -705,7 +702,6 @@ function deleteChosenRows(column, tag, column2, class) {
 				Array.print(linevalues);
 			}
 	}
-
 	tdir = getDirectory("temp");
 	selectWindow("Log");
 	saveAs("Text", tdir+"Log.csv");
@@ -719,7 +715,6 @@ function deleteChosenRows(column, tag, column2, class) {
 
 function getClass() {
 //determines the starting and finishing position of a track and classifies as "Yes-Yes", "Yes-No", "No-No", "No-Yes"
-
 //is there a results table containing the column heading Inside?
 
 	if (isOpen("Results") && getResultString("Inside?", 0) == "Yes" || getResultString("Inside?", 0) == "No") {
@@ -739,10 +734,10 @@ function getClass() {
 
 			j_values = newArray();
 			for (j=0; j<nResults; j++) {
-		
+
 				if (getResult("Track", j) == track_number[i]){
 					j_values = Array.concat(j_values, j);
-				}	
+				}
 			}
 
 			//get the class
@@ -763,15 +758,15 @@ function getClass() {
 
 function myFisherYates(array) {
 //randomise an array 
-    
-    if(array.length!=0) {       
-        for (i=0;i<array.length ;i++) { 
-            j = floor(random()*(i+1)); 
-            temp1 = array[i]; temp2 = array[j]; 
-            array[i] = temp2; array[j] = temp1; 
-		} 
-    } 
-} 
+
+    if(array.length!=0) {
+        for (i=0;i<array.length ;i++) {
+            j = floor(random()*(i+1));
+            temp1 = array[i]; temp2 = array[j];
+            array[i] = temp2; array[j] = temp1;
+		}
+    }
+}
 
 function get_skel_xy(image) {
 //return an array of x and y positions for the skeleton of a selection
@@ -781,7 +776,7 @@ function get_skel_xy(image) {
 	sel = selectionType();
 	if (sel == -1 || sel == 10){
 		exit("There is no area selection");
-	}	
+	}
 		else {
 			run("Colors...", "foreground=white background=white selection=cyan");
 			getDimensions(width, height, channels, slices, frames);
@@ -803,9 +798,9 @@ function get_skel_xy(image) {
 
 function get_s_dist(x, y, xvalues, yvalues) {
 //get the shortest distance between x,y and the values in xarray, yarray
-	
+
 //check the arrays are the same length
-	if (xvalues.length == yvalues.length){	
+	if (xvalues.length == yvalues.length){
 		shortest = 100000;
 		for (i=0; i<xvalues.length; i++) {
 			xdist = x - xvalues[i];
