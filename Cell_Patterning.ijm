@@ -869,9 +869,9 @@ function basic_summary() {
 				x2 = x-x1;
 				y2 = y-y1;
       		  	dist = (sqrt((x2*x2)+(y2*y2)))*cal;
-       		 	speed = dist/time_step;     	
+       		 	speed = dist/time_step;
 			}
-		}	
+		}
 		setResult("Distance_(um)", i, dist);
     	setResult("Speed_(um/min)", i, speed);
 	}
@@ -898,7 +898,7 @@ function basic_summary() {
 		x = values_x[0];
 		y = values_y[0];
 		euc_d = newArray(0);
-		for (n=0; n<(values_x.length); n++) {	
+		for (n=0; n<(values_x.length); n++) {
 			x1 = values_x[n];
 			y1 = values_y[n];
 			if (x > x1) {x2 = x - x1;} else {x2 = x1 - x;}
@@ -907,11 +907,11 @@ function basic_summary() {
 			euc_d = Array.concat(euc_d, eucdist);
 		}
     	index = -1;
-    	for (k=0; k<nResults(); k++) {   	
+    	for (k=0; k<nResults(); k++) {
     		if (getResult("Track", k) == track_number[j]) {
     		index = index + 1;
     		value = euc_d[index];
-    		setResult("Euclidean_D_(um)", k, value);		
+    		setResult("Euclidean_D_(um)", k, value);
     		}
     	}
 	}
@@ -931,18 +931,17 @@ function basic_summary() {
 	for (k=0; k<nResults; k++) {
 		value = persistence[k];
 		setResult("Persistence", k , value);
-	}	
+	}
 }
 
 function per_track_summary() {
 //summarises each individual track into a new summary table
-
 //draws the summary table
 	requires("1.41g");
     title1 = "Summary Table";
     title2 = "["+title1+"]";
     f = title2;
-    
+
     if (isOpen(title1)) {
     }
     else {
@@ -957,7 +956,7 @@ function per_track_summary() {
 	for (w=0; w<nResults; w++) {
 		if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
 			t_num = getResult("Track", w);
-			track_number = Array.concat(track_number, t_num);	
+			track_number = Array.concat(track_number, t_num);
 		}
 	}
 
@@ -978,7 +977,7 @@ function per_track_summary() {
 				values_x = Array.concat(values_x, x_val);
 				y_val = getResult("Y", j);
 				values_y = Array.concat(values_y, y_val);
-			}	
+			}
 		}
 
 //calculate the euclidean distance for track
@@ -1005,7 +1004,7 @@ function per_track_summary() {
 				value = getResult("Acc_Dist_(um)", j);
 				acc_dist = Array.concat(acc_dist, value);
 			}
-		
+
 		}
 		Array.getStatistics(acc_dist, min, max, mean, stdDev);
 		total_distance = max;
@@ -1037,7 +1036,7 @@ function per_track_summary() {
 		 		done = true; // break 
 		 	}
 		}
-	}	
+	}
 
 //get initial distance from array for each track
 	var done1 = false; // used to prematurely terminate loop
@@ -1075,11 +1074,11 @@ function per_track_summary() {
 	number  = 0;
 
 	for (i=0; i<track_number.length; i++){
-//exclude tracks with less than 10 timepoints	
+//exclude tracks with less than 10 timepoints
 		if ((track_lengths[i]/time_step) < 10) {
 			print("Track "+track_number[i]+" excluded < 10 steps");
 		} 
-			else {	
+			else {
 				print(f, (number++)+"\t"+(track_number[i])+"\t"+(track_lengths[i])+"\t"+(max_distances[i])+"\t"+(euclidean_distances[i])+"\t"+(track_persistence[i])+"\t"+(track_speed[i])+"\t"+(e_track_speed[i])+"\t"+track_class[i]+"\t"+(dist_com[i]));
     		}
 	}
@@ -1099,15 +1098,15 @@ function summarise_windows() {
 			run("New... ", "name="+title2+" type=Table width=500 height=600");
     	    print(f, "\\Headings: Class\tTime from Entry (mins)\tNumber\tMean Angle\tSE\tMean Euc. Dis (um)\tSE\tMean Euc. Speed (um/min)\tSE\tMean Acc. Dis (um)\tSE\tMean Acc. Speed (um/min)\tSE\tMean Persistence\tSE");//\tMean P/D\tStDev");
    	 	}
-	
+
 	if (isOpen("Log")){
 				selectWindow("Log");
 				run("Close");
 				}
-				
+
 //print raw data to log for stats
 	print("Class",",","Entry_Time",",","E_Angle",",","E_Dis",",","E_Speed",",","A_Dis",",","A_Speed",",","Pers");
-	
+
 //prompt for time step and window to allow for multiple analyses - prompt for calibration of image
 	Dialog.create("Please set window size and time_step");
 	Dialog.addNumber("Time Step (min):", 10);
@@ -1156,7 +1155,7 @@ function summarise_windows() {
 			a_speed = newArray();
 			pers = newArray();
 			pxd = newArray();
-	
+
 			for (k=0; k<nResults; k++) {
 				if ((getResultString("Class", k) == classes[z]) && (getResult("-Index", k) == hour_index[j])) {
 //populate your arrays here
@@ -1213,8 +1212,8 @@ function summarise_windows() {
 			Array.getStatistics(pxd, min, max, mean, stdDev);
 			mean_pxd = mean;
 			se_pxd = (stdDev)/sqrt(pxd.length);
-			
-			for (t=0; t<(e_angle.length); t++) {	
+
+			for (t=0; t<(e_angle.length); t++) {
 				print(class+","+time_entry+","+e_angle[t]+","+e_distance[t]+","+e_speed[t]+","+a_dis[t]+","+a_speed[t]+","+pers[t]);
 			}
 			print(f, class+"\t"+time_entry+"\t"+nTracks+"\t"+mean_angle+"\t"+se_angle+"\t"+mean_e_dis+"\t"+se_e_dis+"\t"+mean_e_speed+"\t"+se_e_speed+"\t"+mean_a_dis+"\t"+se_a_dis+"\t"+mean_a_speed+"\t"+se_a_speed+"\t"+mean_pers+"\t"+se_pers);
@@ -1262,7 +1261,7 @@ if (isOpen("Log")) {
 		print("Track "+track_number[i]);
 		count=0;
 		for (j=0; j<nResults; j++) {
-		
+
 			if ((getResult("Track", j) == track_number[i])&&(getResult("Ch", j)==1)){
 				count = count+1;
 
@@ -1275,19 +1274,14 @@ if (isOpen("Log")) {
 				for (k=0; k<nchans; k++) {
 					chans[k]= getResult("RawIntDen", j+k);
 					}
-				
+
 				//class = getResultString("Class", j);			
 				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+" "+chans[0]+" "+chans[1]+" "+chans[2]+" "+chans[3]);
-			
+
 				}
-		
 			}
 		}
 	print("End of MTrackJ Data File");
 }
 
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
-<<<<<<< HEAD
-//Last revised by Richard Mort 15/05/2017
-=======
->>>>>>> testing
