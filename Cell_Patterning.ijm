@@ -445,8 +445,8 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		t_num = 0;
 
 		for (j=0; j<nResults; j++) {
-			if ((getResult("Track", j) > t_num)||(getResult("Track", j) < t_num)) {
-				t_num = getResult("Track", j);
+			if ((getResultString("Track", j) != t_num)||(getResultString("Track", j) < t_num)) {
+				t_num = getResultString("Track", j);
 				track_number = Array.concat(track_number, t_num);	
 			}
 		}
@@ -735,9 +735,9 @@ function getClass() {
 		t_num = 0;
 
 		for (j=0; j<nResults; j++) {
-			if ((getResult("Track", j) > t_num)||(getResult("Track", j) < t_num)) {
-				t_num = getResult("Track", j);
-				track_number = Array.concat(track_number, t_num);	
+		if ((getResultString("Track", j) != t_num)||(getResultString("Track", j) < t_num)) {
+			t_num = getResultString("Track", j);
+			track_number = Array.concat(track_number, t_num);	
 			}
 		}
 
@@ -746,7 +746,7 @@ function getClass() {
 			j_values = newArray();
 			for (j=0; j<nResults; j++) {
 
-				if (getResult("Track", j) == track_number[i]){
+				if (getResultString("Track", j) == track_number[i]){
 					j_values = Array.concat(j_values, j);
 				}
 			}
@@ -1287,7 +1287,7 @@ if (isOpen("Log")) {
 					}
 
 				//class = getResultString("Class", j);			
-				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+" "+chans[0]+" "+chans[1]+" "+chans[2]+" "+chans[3]);
+				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+"");
 
 				}
 			}
