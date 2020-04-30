@@ -309,7 +309,7 @@ run("Restore Selection");
 	}
 		else {
 			run("Table...", "name="+title2+" width=1000 height=300");
-			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
+			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
 		}
 
     //run("Colors...", "foreground=white background=white selection=cyan");
@@ -340,7 +340,7 @@ run("Restore Selection");
        if ((x == x_values[i]) && (y == y_values[i])) {inside = "Yes";} else {}
     }
 
-    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside);
+    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside);
 
 //advance to next slice
     run("Next Slice [>]");
@@ -1254,8 +1254,8 @@ if (isOpen("Log")) {
 	t_num = 0;
 
 	for (w=0; w<nResults; w++) {
-		if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
-			t_num = getResult("Track", w);
+		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
+			t_num = getResultString("Track", w);
 			track_number = Array.concat(track_number, t_num);	
 			}
 		}
@@ -1269,15 +1269,15 @@ if (isOpen("Log")) {
 	print("Cluster 1");
 
 	for (i=0; i<track_number.length; i++){
-		print("Track "+track_number[i]);
+		print("Track "+i);
 		count=0;
 		for (j=0; j<nResults; j++) {
 
-			if ((getResult("Track", j) == track_number[i])&&(getResult("Ch", j)==1)){
+			if ((getResultString("Track", j) == track_number[i])&&(getResult("Ch", j)==1)){
 				count = count+1;
 
-				x = getResult("XM", j);
-				y = getResult("YM", j);
+				x = getResult("X", j);
+				y = getResult("Y", j);
 				z =	getResult("Slice", j);
 				t = getResult("Frame", j);
 				c = getResult("Ch", j);
