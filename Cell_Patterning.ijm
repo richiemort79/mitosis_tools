@@ -182,7 +182,7 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	print("Y Values");
 	Array.print(y_values);
 	selectWindow("Log");
-	saveAs("Text", dir+Image+"Seelction_Coordinates.txt");
+	saveAs("Text", dir+Image+"Selection_Coordinates.txt");
 
 	if (isOpen("Log")){
 		selectWindow("Log");
