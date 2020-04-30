@@ -25,7 +25,7 @@
 //
 //24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
 //Adding a track changes the source number 1, 2, 3, 4 etc
-//Adding a mitosis splits the track into daughters a and b (1a, 1b, 1aa, 1bb)
+//Adding a mitosis splits the track into daughters a and b (1a, 1b, 1aa, 1ab)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Global variables for cell tracking
@@ -509,7 +509,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 
 //calculate distance for each step
 		for (i=0; i<nResults; i++) {
-			if (getResult("Track", i) == getResult("Track", i-1)) {
+			if (getResultString("Track", i) == getResultString("Track", i-1)) {
 				x = getResult("X", i);
 				y = getResult("Y", i);
 				x1 = getResult("X", i-1);
@@ -527,9 +527,9 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		track_number = newArray();
 		t_num = 0;
 
-		for (w=0; w<nResults; w++) {
-			if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
-				t_num = getResult("Track", w);
+		for (w=0; j<nResults; w++) {
+			if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
+				t_num = getResultString("Track", w);
 				track_number = Array.concat(track_number, t_num);	
 			}
 		}
