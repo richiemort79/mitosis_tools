@@ -326,10 +326,10 @@ run("Restore Selection");
 	//get nearest distance to the skeleton
 	posx = x;
 	posy = y;
-	Array.print(xpoints);
-	Array.print(ypoints);
-	print(x);
-	print(y);
+	//Array.print(xpoints);
+	//Array.print(ypoints);
+	//print(x);
+	//print(y);
 	get_s_dist(x, y, xpoints, ypoints);
     dist = shortest;
 
