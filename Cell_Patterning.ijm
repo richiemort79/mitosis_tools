@@ -694,6 +694,11 @@ else if (cmd=="Summarise Windows"){
 
 }
 
+macro "Parse to mdf2 Action Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1eD1fD20D24D27D2aD2eD2fD30D34D37D3aD3eD3fD40D44D45D46D47D48D49D4aD4bD4cD4eD4fD50D54D57D5aD5eD5fD60D64D67D6aD6eD6fD70D74D75D76D77D78D79D7aD7bD7cD7eD7fD80D84D87D8aD8eD8fD90D94D97D9aD9eD9fDa0Da4Da5Da6Da7Da8Da9DaaDabDacDaeDafDb0Db4Db7DbaDbeDbfDc0Dc4Dc7DcaDceDcfDd0Dd4Dd5Dd6Dd7Dd8Dd9DdaDdbDdcDdeDdfDe0DeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC9c9D5bD6bD85D86D95D96C7adD07D61C8adD02C68bD3dCf66D2bD3bC6beD28D29D38D39D55D56D65D66CbcdD01De1C58bDe6CdddD25D26D35D36D58D59D68D69D8bD9bDb5Db6DbbDc5Dc6DcbC7adD03D04D05D06D13D21D23D31D33D41D43D51D53D63D73D83D93Da3Db3Dc3Dd3C9beD12D22D32D42D52D62D72D82D92Da2Db2Dc2Dd2C79cD91Da1Cfd6Db8Db9Dc8Dc9CeeeD8cD9cDbcDccC57aD9dC89cDd1C9bdD11C69cD0aD0bD0cDb1Dc1Cfa7D88D89D98D99CdedD5cD6cC68bD4dDe4De5C79dD08D09D71D81CfccD2cD3cC68cD1dC58bD5dC57bD6dD7dD8dDe7De8De9C8acD0dDedC68cD2dDe3C79cDe2"
+{
+	convert_to_mdf2();
+}
+
 //ADD//FUNCTIONS//BELOW//THIS//LINE////////////////////////////////////////////////////////////////////////
 
 
@@ -1392,6 +1397,71 @@ function summarise_windows() {
 
 		}
 
+}
+
+function convert_to_mdf2(){
+
+//check how many channels there are with min and max values in Ch
+
+chans = newArray("red","green","blue","bright");
+nchans = 0;
+for (z=0; z<nResults; z++) {
+	if (getResult("Ch", z)>nchans) {
+		nchans = getResult("Ch", z);
+	}
+}
+
+//close the log
+if (isOpen("Log")) {
+	selectWindow("Log");
+	run("Close");
+}
+
+//get the track numbers in an array to use as the index
+	track_number = newArray();
+	t_num = 0;
+
+	for (w=0; w<nResults; w++) {
+		if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
+			t_num = getResult("Track", w);
+			track_number = Array.concat(track_number, t_num);	
+			}
+		}
+
+	print("MTrackJ 1.2.0 Data File");
+	print("Assembly 1");
+
+
+//write to cluster 1
+
+	print("Cluster 1");
+
+	for (i=0; i<track_number.length; i++){
+		print("Track "+track_number[i]);
+		count=0;
+		for (j=0; j<nResults; j++) {
+		
+			if ((getResult("Track", j) == track_number[i])&&(getResult("Ch", j)==1)){
+				count = count+1;
+
+				x = getResult("XM", j);
+				y = getResult("YM", j);
+				z =	getResult("Slice", j);
+				t = getResult("Frame", j);
+				c = getResult("Ch", j);
+
+				for (k=0; k<nchans; k++) {
+					chans[k]= getResult("RawIntDen", j+k);
+					}
+				
+				//class = getResultString("Class", j);			
+				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+" "+chans[0]+" "+chans[1]+" "+chans[2]+" "+chans[3]);
+			
+				}
+		
+			}
+		}
+	print("End of MTrackJ Data File");
 }
 
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
