@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //A simple tool to aid in the manual tracking of fluorescently labeled cells and in the processing of the tracking data
 //The cells/objects are tracked in relation to a defined targetROI (e.g. A Hair Follicle Condensate)
 //Installation: Place Cell_Patterning.ijm in /fiji/macros/toolsets and restart
 //Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND - please refer to the separate license 
+=======
+//Started work on testing 11th March 2020
+
+//A simple tool to aid in the manual tracking of flourescently labelled cells 
+//during pattern fomrtion
+>>>>>>> testing
 
 //Tracking:
 
