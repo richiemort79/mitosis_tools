@@ -844,8 +844,8 @@ function basic_summary() {
 	track_number = newArray();
 	t_num = 0;
 	for (w=0; w<nResults; w++) {
-		if ((getResultString("Track", w) != t_num)||(getResultString("Track", j) < t_num)) {
-			t_num = getResultString("Track", j);
+		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
+			t_num = getResultString("Track", w);
 			track_number = Array.concat(track_number, t_num);	
 			}
 		}
@@ -909,7 +909,7 @@ function basic_summary() {
 		values_x = newArray();
 		values_y = newArray();
 		for (k=0; k<nResults(); k++) {
-			if (getResult("Track", k) == track_number[j]){
+			if (getResultString("Track", k) == track_number[j]){
 				values_x = Array.concat(values_x, getResult("X", k));
 				values_y = Array.concat(values_y, getResult("Y", k));
 			}
@@ -927,7 +927,7 @@ function basic_summary() {
 		}
     	index = -1;
     	for (k=0; k<nResults(); k++) {
-    		if (getResult("Track", k) == track_number[j]) {
+    		if (getResultString("Track", k) == track_number[j]) {
     		index = index + 1;
     		value = euc_d[index];
     		setResult("Euclidean_D_(um)", k, value);
@@ -973,11 +973,12 @@ function per_track_summary() {
 	t_num = 0;
 
 	for (w=0; w<nResults; w++) {
-		if ((getResult("Track", w) > t_num)||(getResult("Track", w) < t_num)) {
-			t_num = getResult("Track", w);
-			track_number = Array.concat(track_number, t_num);
+		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
+			t_num = getResultString("Track", w);
+			track_number = Array.concat(track_number, t_num);	
+			}
 		}
-	}
+
 
 //get number of tracks (nTracks)
 	nTracks = track_number.length;
@@ -991,7 +992,7 @@ function per_track_summary() {
 		values_x = newArray();
 		values_y = newArray();
 		for (j=0; j<nResults; j++) {
-			if (getResult("Track", j) == track_number[i]){
+			if (getResultString("Track", j) == track_number[i]){
 				x_val = getResult("X", j);
 				values_x = Array.concat(values_x, x_val);
 				y_val = getResult("Y", j);
@@ -1019,7 +1020,7 @@ function per_track_summary() {
 	for (i=0; i<track_number.length; i++){
 		acc_dist = newArray();
 		for (j=0; j<nResults; j++) {
-			if (getResult("Track", j) == track_number[i]){
+			if (getResultString("Track", j) == track_number[i]){
 				value = getResult("Acc_Dist_(um)", j);
 				acc_dist = Array.concat(acc_dist, value);
 			}
@@ -1036,7 +1037,7 @@ function per_track_summary() {
 	for (i=0; i<track_number.length; i++){
 		done = false;
 		for (j=0; j<nResults && !done; j++) {
-		 	if (getResult("Track", j) == track_number[i]){
+		 	if (getResultString("Track", j) == track_number[i]){
 		 		track_lengths = Array.concat(track_lengths, (getResult("T_Length", j))*time_step);
 		 		done = true; // break 
 		 	}
@@ -1049,7 +1050,7 @@ function per_track_summary() {
 	for (i=0; i<track_number.length; i++){
 		done = false;
 		for (j=0; j<nResults && !done; j++) {
-		 	if (getResult("Track", j) == track_number[i]){
+		 	if (getResultString("Track", j) == track_number[i]){
 		 		t_cl = getResultString("Class", j);
 		 		track_class = Array.concat(track_class, t_cl);
 		 		done = true; // break 
@@ -1063,7 +1064,7 @@ function per_track_summary() {
 	for (i=0; i<track_number.length; i++){
 		done1 = false;
 		for (j=0; j<nResults && !done1; j++) {
-		 	if (getResult("Track", j) == track_number[i]){
+		 	if (getResultString("Track", j) == track_number[i]){
 		 		comd = (getResult("Distance_from_COM", j)*cal);
 		 		dist_com = Array.concat(dist_com, comd);
 		 		done1 = true; // break 
