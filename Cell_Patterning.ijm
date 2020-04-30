@@ -527,7 +527,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		track_number = newArray();
 		t_num = 0;
 
-		for (w=0; j<nResults; w++) {
+		for (w=0; w<nResults; w++) {
 			if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
 				t_num = getResultString("Track", w);
 				track_number = Array.concat(track_number, t_num);	
@@ -548,7 +548,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 
 			for (j=0; j<nResults; j++) {
 
-				if (getResult("Track", j) == track_number[i]){
+				if (getResultString("Track", j) == track_number[i]){
 					x_val = getResult("X", j);
 					values_x = Array.concat(values_x, x_val);
 					x2_val = getResult("Follicle_COMX", j);
@@ -638,7 +638,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		for (i=0; i<track_number.length; i++){
 			slices = newArray();
 				for (j=0; j<nResults; j++) {
-					if (getResult("Track", j) == track_number[i]){
+					if (getResultString("Track", j) == track_number[i]){
 						slices = Array.concat(slices, getResult("Slice", j));
 					}
 				}
@@ -646,7 +646,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 			Array.reverse(slices);
 
 			for (j=0; j<nResults; j++) {
-				if ((getResult("Track", j) == track_number[i])&(max>step)){
+				if ((getResultString("Track", j) == track_number[i])&(max>step)){
 					setResult("-Index", j, (max-step));
 					max = max-1;
 				}
