@@ -81,49 +81,32 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	daughter = "";
 	getDimensions(width, height, channels, slices, frames);
 
-if (frames > slices) {
-	run("Re-order Hyperstack ...", "channels=[Channels (c)] slices=[Frames (t)] frames=[Slices (z)]");
+	if (frames > slices) {
+		run("Re-order Hyperstack ...", "channels=[Channels (c)] slices=[Frames (t)] frames=[Slices (z)]");
 	}
 
-getDimensions(width, height, channels, slices, frames);
+	getDimensions(width, height, channels, slices, frames);
 
 //print(slices);
 
 //prompt for calibration of image
-<<<<<<< HEAD
 	Dialog.create("Please set calibration values");
 	Dialog.addNumber("Time Step (min):", 10);
 	Dialog.addNumber("Scale (um/px):", 0.619);
+	Dialog.addCheckbox("Find random cells?", false);
 	Dialog.addNumber("Number of random cells:", 5);
 	Dialog.show();
 	time_step = Dialog.getNumber();
 	cal = Dialog.getNumber();
+	rcells = Dialog.getChoice();
 	sample = Dialog.getNumber();
 
-//prompt user to define the hair follicle condensate in the final frame
-	run("Colors...", "foreground=white background=black selection=cyan");
-	setSlice(frames);
+//Promt user to define the hair follicle condensate in the finale frame
+	run("Colors...", "foreground=white background=black selection=cyan");///////////////////////////////////////////////////////////////////////////////////NEED THIS?????????????????????????????????
+	setSlice(slices);
 	run("Select None");
 	setTool("oval");
 	waitForUser("Select Condensate", "Please outline the condensate and press OK");
-=======
-Dialog.create("Please set calibration values");
-Dialog.addNumber("Time Step (min):", 10);
-Dialog.addNumber("Scale (um/px):", 0.619);
-Dialog.addCheckbox("Find random cells?", false);
-Dialog.addNumber("Number of random cells:", 5);
-Dialog.show();
-time_step = Dialog.getNumber();
-cal = Dialog.getNumber();
-rcells = Dialog.getChoice();
-sample = Dialog.getNumber();
-
-//Promt user to define the hair follicle condensate in the finale frame
-setSlice(slices);
-run("Select None");
-setTool("oval");
-waitForUser("Select Condensate", "Please outline the condensate and press OK");
->>>>>>> testing
 
 //save snapshots frame 1 and last
 	run("Select None");
