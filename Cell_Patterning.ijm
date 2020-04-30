@@ -191,39 +191,6 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 			selectWindow("ROI Manager");
 			run("Close");
 		}
-<<<<<<< HEAD
-
-	run("Select None");
-	setSlice(1);
-	run("Select All");
-	run("Copy");
-	run("Select None");
-	run("Internal Clipboard");
-	run("8-bit");
-	run("Gaussian Blur...", "sigma=1");
-	run("Find Maxima...", "noise=15 output=[Point Selection]");
-	getDimensions(width, height, channels, slices, frames);
-
-	if (isOpen("Clipboard")){
-		selectWindow("Clipboard");
-		run("Close");
-	}
-
-	newImage("Untitled", "8-bit black", width, height, 1);
-	run("Colors...", "foreground=white background=black selection=cyan");
-	run("Restore Selection");
-	run("Draw");
-	//run("Invert");//////////////////////////////////////////////////////////////////////////////////////////////////CHECK YOU NEED THIS LINE ON YOUR SETUP
-	run("Analyze Particles...", "exclude add");
-
-	if (isOpen("Untitled")){
-		selectWindow("Untitled");
-		run("Close");
-	}
-
-	selectWindow(Image);
-	roiManager("Show All");
-=======
 
 	run("Select None");
 	setSlice(1);
@@ -256,20 +223,13 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 		selectWindow("Untitled");
 		run("Close");
 	}
->>>>>>> testing
 
 //randomly select 20 ROIS
 	run("Set Measurements...", "center redirect=None decimal=4");
 	roiManager("Select All");
 	roiManager("Measure");
-<<<<<<< HEAD
 
 //make sure there are enough ROIS in the manager
-=======
-
-
-//make sure there are enough rois in the manager
->>>>>>> testing
 	cells = roiManager("count");
 
 	if (sample > cells) {sample = cells;} else {}
@@ -278,28 +238,17 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	if (isOpen("ROI Manager")) {
     	selectWindow("ROI Manager");
     	run("Close");
-<<<<<<< HEAD
 	}
-=======
-    	      }
->>>>>>> testing
 
 	k=0; 
 	n=nResults(); 
 	rois=newArray(n); 
 
-<<<<<<< HEAD
 	for(i=0;i<n;i++) {//These curly brackets were not closed on 150517**********************************************************************
     	rois[i]=k++;
 	} 
 
 //need to check that if there are less than roi_n cells it just selects all
-=======
-	for(i=0;i<n;i++) 
-    	rois[i]=k++; 
-
-//need to check that if there are less tham roi_n cells it just seslects all
->>>>>>> testing
 	myFisherYates(rois); 
 
 	count=1; 
