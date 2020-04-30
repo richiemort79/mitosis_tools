@@ -1,4 +1,4 @@
-   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //A simple tool to aid in the manual tracking of fluorescently labeled cells and in the processing of the tracking data
 //The cells/objects are tracked in relation to a defined targetROI (e.g. A Hair Follicle Condensate)
 //Installation: Place Cell_Patterning.ijm in /fiji/macros/toolsets and restart
@@ -21,11 +21,12 @@
 //	Vector Windows Action Tool		- Calculates summary stats for sliding windows across the tracking data in a new table
 //	Summarise Windows Action Tool	- Summarises the windows data in a new table
 //									- Prints to the log the raw data summarised in the summary table for statistical anlysis
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//
+//
 //24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
 //Adding a track changes the source number 1, 2, 3, 4 etc
 //Adding a mitosis splits the track into daughters a and b (1a, 1b, 1aa, 1bb)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Global variables for cell tracking
 var gtrack = 1;
