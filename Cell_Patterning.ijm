@@ -639,7 +639,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 			slices = newArray();
 				for (j=0; j<nResults; j++) {
 					if (getResultString("Track", j) == track_number[i]){
-						slices = Array.concat(slices, getResult("Slice", j));
+						slices = Array.concat(slices, getResult("Frame", j));
 					}
 				}
 			Array.getStatistics(slices, min, max, mean, stdDev);
