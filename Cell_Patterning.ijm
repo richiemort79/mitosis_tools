@@ -302,7 +302,7 @@ run("Restore Selection");
 	}
 		else {
 			run("Table...", "name="+title2+" width=1000 height=300");
-			print(f, "\\Headings: \tImage_ID\tTrack\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
+			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tSlice\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM\tInside?");
 		}
 
     run("Colors...", "foreground=white background=white selection=cyan");
