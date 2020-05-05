@@ -441,15 +441,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		Dialog.create("Trim Data?");
 		Dialog.addMessage("If you would like to trim the data on yes press OK, otherwise cancel");
 		Dialog.show();
-		track_number = newArray();
-		t_num = 0;
-
-		for (j=0; j<nResults; j++) {
-			if ((getResultString("Track", j) != t_num)||(getResultString("Track", j) < t_num)) {
-				t_num = getResultString("Track", j);
-				track_number = Array.concat(track_number, t_num);	
-			}
-		}
+		track_number = list_no_repeats ("Results", "Track");
 
 		for (i=0; i<track_number.length; i++){
 			var flag = true;
@@ -731,15 +723,7 @@ function getClass() {
 	if (isOpen("Results") && getResultString("Inside?", 0) == "Yes" || getResultString("Inside?", 0) == "No") {
 
 //get the class (e.g. no-yes)
-		track_number = newArray();
-		t_num = 0;
-
-		for (j=0; j<nResults; j++) {
-		if ((getResultString("Track", j) != t_num)||(getResultString("Track", j) < t_num)) {
-			t_num = getResultString("Track", j);
-			track_number = Array.concat(track_number, t_num);	
-			}
-		}
+		track_number = list_no_repeats ("Results", "Track");
 
 		for (i=0; i<track_number.length; i++){
 
