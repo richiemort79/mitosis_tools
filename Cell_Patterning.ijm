@@ -524,15 +524,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		}
 
 //get the track numbers in an array to use as the index
-		track_number = newArray();
-		t_num = 0;
-
-		for (w=0; w<nResults; w++) {
-			if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
-				t_num = getResultString("Track", w);
-				track_number = Array.concat(track_number, t_num);	
-			}
-		}
+		track_number = list_no_repeats ("Results", "Track");
 
 		for (i=0; i<track_number.length; i++){
 			values_x = newArray();
@@ -841,14 +833,7 @@ function basic_summary() {
 //basic summary of the tracking results into the same results table
 
 //get the track numbers in an array to use as the index
-	track_number = newArray();
-	t_num = 0;
-	for (w=0; w<nResults; w++) {
-		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
-			t_num = getResultString("Track", w);
-			track_number = Array.concat(track_number, t_num);	
-			}
-		}
+	track_number = list_no_repeats ("Results", "Track");
 
 //get number of tracks (nTracks)
 	nTracks = track_number.length;
@@ -969,15 +954,7 @@ function per_track_summary() {
     }
 
 //get the track numbers in an array to use as the index
-	track_number = newArray();
-	t_num = 0;
-
-	for (w=0; w<nResults; w++) {
-		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
-			t_num = getResultString("Track", w);
-			track_number = Array.concat(track_number, t_num);	
-			}
-		}
+	track_number = list_no_repeats ("Results", "Track");
 
 //Array.print(track_number);
 
@@ -1260,15 +1237,7 @@ if (isOpen("Log")) {
 }
 
 //get the track numbers in an array to use as the index
-	track_number = newArray();
-	t_num = 0;
-
-	for (w=0; w<nResults; w++) {
-		if ((getResultString("Track", w) != t_num)||(getResultString("Track", w) < t_num)) {
-			t_num = getResultString("Track", w);
-			track_number = Array.concat(track_number, t_num);	
-			}
-		}
+	track_number = list_no_repeats ("Results", "Track");
 
 	print("MTrackJ 1.2.0 Data File");
 	print("Assembly 1");
