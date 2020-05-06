@@ -336,7 +336,7 @@ run("Restore Selection");
 	//Array.print(ypoints);
 	//print(x);
 	//print(y);
-	get_s_dist(x, y, xpoints, ypoints);
+	get_s_dist(x, y, xpoints, ypoints, cal);
     dist = shortest;
 
 //is the xy position within the condensate at this time point?
@@ -801,14 +801,14 @@ function get_skel_xy(image) {
 		}
 	}
 
-function get_s_dist(x, y, xvalues, yvalues) {
+function get_s_dist(x, y, xvalues, yvalues, cal) {
 //get the shortest distance between x,y and the values in xarray, yarray
 
 //check the arrays are the same length
 	if (xvalues.length == yvalues.length){
 		shortest = 100000;
 		for (i=0; i<xvalues.length; i++) {
-			dist1 = get_pythagoras(x,y,xvalues[i],yvalues[i],1);
+			dist1 = get_pythagoras(x,y,xvalues[i],yvalues[i],cal);
 			if (dist1 < shortest) {
 				shortest = dist1;//*cal;
 				com_roi_x = xvalues[i];
@@ -860,7 +860,7 @@ function basic_summary() {
 
 //calculate accumulated distance for each step
 	for (i=0; i<nResults; i++) {
-		if (i==0) {//stops it looping between the first/last value if there is only 1 track
+		if ((i==0) || (getResultString("Track", i) != getResultString("Track", i-1))) {//stops it looping between the first/last value if there is only 1 track
 			dist = 0;
 			speed = 0;
 		}
