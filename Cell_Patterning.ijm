@@ -21,11 +21,13 @@
 //	Vector Windows Action Tool		- Calculates summary stats for sliding windows across the tracking data in a new table
 //	Summarise Windows Action Tool	- Summarises the windows data in a new table
 //									- Prints to the log the raw data summarised in the summary table for statistical anlysis
+//Plotting:
 //
+//	Parse to Mdf exports tracking data in mdf format for plotting with MTrackJ
 //
 //24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
 //Adding a track changes the source number 1, 2, 3, 4 etc
-//Adding a mitosis splits the track into daughters a and b (1a, 1b, 1aa, 1ab)
+//Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Global variables for cell tracking
