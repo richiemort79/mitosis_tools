@@ -903,7 +903,7 @@ function basic_summary() {
 		for (n=0; n<(values_x.length); n++) {
 			x1 = values_x[n];
 			y1 = values_y[n];
-			eucdis = get_pythagoras(x,y,x1,y1,cal);
+			eucdist = get_pythagoras(x,y,x1,y1,cal);
 			euc_d = Array.concat(euc_d, eucdist);
 		}
     	index = -1;
