@@ -518,9 +518,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 				y = getResult("Y", i);
 				x1 = getResult("X", i-1);
 				y1 = getResult("Y", i-1);
-					if (x > x1) {x2 = x - x1;} else {x2 = x1 - x;}
-					if (y > y1) {y2 = y - y1;} else {y2 = y1 - y;}
-    		    dist = (sqrt((x2*x2)+(y2*y2)))*cal;
+    		    dist = get_pythagoras(x,y,x1,y1,cal);
     		    speed = dist/time_step;
     		    setResult(prefix+"-min Distance (um)", i, dist);
     		    setResult(prefix+"-min Speed (um/min)", i, speed);
@@ -810,9 +808,7 @@ function get_s_dist(x, y, xvalues, yvalues) {
 	if (xvalues.length == yvalues.length){
 		shortest = 100000;
 		for (i=0; i<xvalues.length; i++) {
-			xdist = x - xvalues[i];
-			ydist = y - yvalues[i];
-			dist1 = sqrt((xdist*xdist)+(ydist*ydist));
+			dist1 = get_pythagoras(x,y,xvalues[i],yvalues[i],1);
 			if (dist1 < shortest) {
 				shortest = dist1;//*cal;
 				com_roi_x = xvalues[i];
@@ -823,6 +819,14 @@ function get_s_dist(x, y, xvalues, yvalues) {
 	else {
 		exit("The arrays are different lengths are these xy coorinates");
 	}
+}
+
+function get_pythagoras(x, y, x1, y1, scale) {
+//get the distance between x,y and x1,y1 in the usual way use scale to convert to real world units
+	x2 = x - x1;
+	y2 = y - y1;
+    distance = (sqrt((x2*x2)+(y2*y2)))*scale;
+	return distance;
 }
 
 function basic_summary() {
@@ -866,9 +870,7 @@ function basic_summary() {
 				y = getResult("Y", i);
 				x1 = getResult("X", i-1);
 				y1 = getResult("Y", i-1);
-				x2 = x-x1;
-				y2 = y-y1;
-      		  	dist = (sqrt((x2*x2)+(y2*y2)))*cal;
+				dist = get_pythagoras(x,y,x1,y1,cal);
        		 	speed = dist/time_step;
 			}
 		}
@@ -901,9 +903,7 @@ function basic_summary() {
 		for (n=0; n<(values_x.length); n++) {
 			x1 = values_x[n];
 			y1 = values_y[n];
-			if (x > x1) {x2 = x - x1;} else {x2 = x1 - x;}
-    		if (y > y1) {y2 = y - y1;} else {y2 = y1 - y;}
-			eucdist = (sqrt((x2*x2)+(y2*y2))) * cal;
+			eucdis = get_pythagoras(x,y,x1,y1,cal);
 			euc_d = Array.concat(euc_d, eucdist);
 		}
     	index = -1;
@@ -980,9 +980,7 @@ function per_track_summary() {
 		y = values_y[0];
 		x1 = values_x[final_value];
 		y1 = values_y[final_value];
-		x2 = x-x1;
-		y2 = y-y1;
-		eucdist = (sqrt((x2*x2)+(y2*y2))) * cal;
+		eucdist = get_pythagoras(x,y,x1,y1,cal);
 		euclidean_distances = Array.concat(euclidean_distances, eucdist);
 	}
 
