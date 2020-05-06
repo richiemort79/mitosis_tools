@@ -1010,7 +1010,7 @@ function per_track_summary() {
 		done = false;
 		for (j=0; j<nResults && !done; j++) {
 		 	if (getResultString("Track", j) == track_number[i]){
-		 		track_lengths = Array.concat(track_lengths, (getResult("T_Length", j))*time_step);
+		 		track_lengths = Array.concat(track_lengths, ((getResult("T_Length", j))-1)*time_step);
 		 		done = true; // break 
 		 	}
 		}
