@@ -1344,4 +1344,59 @@ function list_no_repeats_filter (table, heading, filter, boolean) {
 	return no_repeats;
 }
 
+function align_data(column) {
+//get the seed track numbers
+	seed_tracks = list_no_repeats_filter("Results", "Track", "Seed", 1);
+
+	s_length = 0;
+//get the length of the longest track
+	for (i=0; i<nResults; i++) {
+		if ((getResult("Seed",i) == 1) && (getResult("T_Length",i)>s_length)) {
+			s_length = getResult("T_Length",i);
+		}
+	}
+
+print("Seed tracks aligned for "+column);
+//write each track to the log preceeded by zero entries upto slength
+	for (i=0; i<seed_tracks.length; i++) {
+		s_array = newArray();
+		for (j=0; j<nResults; j++) {
+			if (getResultString("Track", j) == toString(seed_tracks[i])) {
+				s_array = Array.concat(s_array, (getResult(column,j)));
+			}
+		}
+		add_zero = s_length - s_array.length;	
+		for (k=0; k<add_zero; k++) {
+			s_array = Array.concat(0, s_array);
+		}
+		Array.print(s_array);
+	}
+
+//get the daughter track numbers
+	daughter_tracks = list_no_repeats_filter("Results", "Track", "Seed", 0);
+	d_length = 0;
+//get the length of the longest track
+	for (i=0; i<nResults; i++) {
+		if ((getResult("Seed",i) == 0) && (getResult("T_Length",i)>d_length)) {
+			d_length = getResult("T_Length",i);
+		}
+	}
+	print("Daughter tracks aligned for "+column);
+
+//write each track to the log followed by zero entries upto dlength
+	for (i=0; i<daughter_tracks.length; i++) {
+		d_array = newArray();
+		for (j=0; j<nResults; j++) {
+			if (getResultString("Track", j) == toString(daughter_tracks[i])) {
+				d_array = Array.concat(d_array, (getResult(column,j)));
+			}
+		}
+		add_zero = d_length - d_array.length;
+		for (k=0; k<add_zero; k++) {
+			d_array = Array.concat(d_array, 0);
+		}
+		Array.print(d_array);
+	}
+}
+
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
