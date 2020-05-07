@@ -315,7 +315,7 @@ run("Restore Selection");
 	}
 		else {
 			run("Table...", "name="+title2+" width=1000 height=300");
-			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM (um)\tInside?");
+			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?");
 		}
 
     //run("Colors...", "foreground=white background=white selection=cyan");
@@ -497,7 +497,12 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 	}
 
 	else if (cmd=="Align Tracks") {
-		
+		align_tracks("Distance_from_COM_(um)");
+		align_tracks("Distance_(um)");
+		align_tracks("Speed_(um/min)");
+		align_tracks("Acc_Dist_(um)");
+		align_tracks("Euclidean_D_(um)");
+		align_tracks("Persistence");
 	}
 	
 
