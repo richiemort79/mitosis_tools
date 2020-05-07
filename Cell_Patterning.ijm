@@ -497,12 +497,12 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 	}
 
 	else if (cmd=="Align Tracks") {
-		align_tracks("Distance_from_COM_(um)");
-		align_tracks("Distance_(um)");
-		align_tracks("Speed_(um/min)");
-		align_tracks("Acc_Dist_(um)");
-		align_tracks("Euclidean_D_(um)");
-		align_tracks("Persistence");
+		align_data("Distance_from_COM_(um)");
+		align_data("Distance_(um)");
+		align_data("Speed_(um/min)");
+		align_data("Acc_Dist_(um)");
+		align_data("Euclidean_D_(um)");
+		align_data("Persistence");
 	}
 	
 
