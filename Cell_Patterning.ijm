@@ -1372,7 +1372,7 @@ print("Seed tracks aligned for "+column);
 		}
 		add_zero = s_length - s_array.length;	
 		for (k=0; k<add_zero; k++) {
-			s_array = Array.concat(0, s_array);
+			s_array = Array.concat("", s_array);
 		}
 		Array.print(s_array);
 	}
@@ -1398,7 +1398,7 @@ print("Seed tracks aligned for "+column);
 		}
 		add_zero = d_length - d_array.length;
 		for (k=0; k<add_zero; k++) {
-			d_array = Array.concat(d_array, 0);
+			d_array = Array.concat(d_array, "");
 		}
 		Array.print(d_array);
 	}
