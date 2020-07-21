@@ -34,6 +34,7 @@
 var gtrack = 1;
 var number = 1;
 
+//Global variables for mitosis tracking
 var is_seed = true;//are we on a seed track or a daughter track?
 var daughter = "";//this is either a or b and is appended to gtrack in the results table
 var mitosis_frame = "";//remember when the mitosis happened so we can go back to track the second daughter
@@ -42,7 +43,16 @@ var mitosis_y = 0; //remember where the mitosis happened so we can go back to tr
 var mitosis = "";//string to print to table
 var last_line = "";//keep record of last entry in table
 
-var posx = 0;//posiiton you click
+//Global calibration variables
+var time_step = 10;//this is the image acquisition rate in minutes
+var cal = 0.619;//This is the resolution of the image in micron/px
+
+//Global variables for ROI tracking
+var shortest = 100000;
+var	xpoints = newArray();//the extent of the ROI
+var ypoints = newArray();//the extent of the ROI
+
+var posx = 0;//position you click
 var posy = 0;//position you click
 
 var f = "";
@@ -54,15 +64,14 @@ var y_values = newArray();
 var roi_n = 0;
 var com_roi_x = 0; 
 var com_roi_y = 0; 
-var time_step = 10;//this is the image acquisition rate in minutes
-var cal = 0.619;//This is the resolution of the image in micron/px
+
 var sample = 5;
 var Image = "";
 var dir = "";
 var tdir = getDirectory("temp");
-var shortest = 100000;
-var	xpoints =newArray();
-var ypoints =newArray();
+
+
+
 var angle = 0;
 var euc_dis = 0;
 var step = 6;//the size of the window in time steps
