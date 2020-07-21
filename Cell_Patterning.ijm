@@ -42,6 +42,8 @@ var mitosis_x = 0; //remember where the mitosis happened so we can go back to tr
 var mitosis_y = 0; //remember where the mitosis happened so we can go back to track the second daughter
 var mitosis = "";//string to print to table
 var last_line = "";//keep record of last entry in table
+var posx = 0;//position you click
+var posy = 0;//position you click
 
 //Global calibration variables
 var time_step = 10;//this is the image acquisition rate in minutes
@@ -51,9 +53,6 @@ var cal = 0.619;//This is the resolution of the image in micron/px
 var shortest = 100000;
 var	xpoints = newArray();//the extent of the ROI
 var ypoints = newArray();//the extent of the ROI
-
-var posx = 0;//position you click
-var posy = 0;//position you click
 
 var f = "";
 
