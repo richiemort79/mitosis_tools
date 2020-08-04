@@ -411,7 +411,7 @@ macro "Add Mitosis Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0cD0dD0eD
 
 	//get the last line of the table to use as the first timepoint
 	mitosis = last_line;
-	print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);
+	print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);//////DELETE THIS LINE????????????????!!!!!!!!!!!!!!!!!!1
 	//need to remember location and get an ROI for that
 }
 
@@ -429,7 +429,7 @@ macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD
 		daughter = "b";
 	}
 	waitForUser("The track has switched to "+gtrack+daughter);
-	print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);
+	print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);//////DELETE THIS LINE????????????????!!!!!!!!!!!!!!!!!!1
 }
 
 macro "Parse to mdf2 Action Tool - CfffD00D01D02D03D04D05D09D0aD0eD0fD10D11D12D13D14D15D19D1aD1eD1fD20D21D22D23D24D25D29D2eD2fD30D31D32D33D34D35D36D39D3cD3dD3eD3fD40D41D42D43D44D45D46D47D4bD4cD4dD4eD4fD50D51D52D53D54D55D56D57D5aD5bD5cD5dD5eD5fD60D61D62D63D64D65D66D6bD6cD6dD6eD6fD70D71D72D73D74D7cD7dD7eD7fD80D81D82D83D84D88D8cD8dD8eD8fD90D91D92D93D94D9cD9dD9eD9fDa0Da1Da2Da3Da4Da5DaaDabDacDadDaeDafDb0Db1Db2Db3Db4Db8Db9DbaDbbDbcDbdDbeDbfDc0Dc1Dc2Dc3Dc8Dc9DcaDcbDccDcdDceDcfDd0Dd9DdaDdbDdcDddDdeDdfDe0De4De5De9DeaDebDecDedDeeDefDf0Df4Df5Df9DfaDfbDfcDfdDfeDffC47bDe6Cf55D18D27CabdD97Dd8Df6Cf33D7aD89D99C78bDa6Cf88D98CaceD0bD75D95Ce23D8bD9aC58cD1dCf66D38Cc9bD58Cf55Df2C8acDe7Cf99De2CfddD37D6aCc79Db7C48cD2bD2cD77D87Cf66D07D16CaceD3bCf44De3C69dD3aCf99D08D26D8aDc4CcdfD78Ce34Db6C58dD0cD85Cf77D28D48CfbbD17Dd1Cf55Dd2De1C9bdDd6CfaaDf3CfeeDd5C47bDe8Df7C79bD96C58dD1bD76Cf67D7bDa8Dd4CcabDc6Cf55D79Dd3C9adD1cCf99D06Ca8bD49Cf66D9bCaceD0dD2dCf45D69Dc5C79cDc7CddfD67Cc56D59CfccDb5C9bdD86CfaaDf1CeffD2aC58cD68C8adD4aCe55Da7CabdDf8CfffDa9"
@@ -915,8 +915,13 @@ function basic_summary() {
 				values_y = Array.concat(values_y, getResult("Y", k));
 			}
 		}
-		x = values_x[0];
-		y = values_y[0];
+
+		///////////////////////////////////////
+		x = values_x[0];/////////////////////////////////
+		y = values_y[0];/////////////////////////////////////////////////If this is a daughter get x and y from the seed?
+		///////////////////////////////////////
+
+		
 		euc_d = newArray(0);
 		for (n=0; n<(values_x.length); n++) {
 			x1 = values_x[n];
