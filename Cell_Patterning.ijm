@@ -1060,7 +1060,7 @@ function per_track_summary() {
 		done1 = false;
 		for (j=0; j<nResults && !done1; j++) {
 		 	if (getResultString("Track", j) == toString(track_number[i])){
-		 		comd = (getResult("Distance_from_COM", j));//removed calibartion form here as it is now calibrtated 060520
+		 		comd = (getResult("Distance_from_COM_(um)", j));//removed calibartion form here as it is now calibrtated 060520
 		 		dist_com = Array.concat(dist_com, comd);
 		 		done1 = true; // break 
 		 	}
