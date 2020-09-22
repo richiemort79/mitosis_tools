@@ -969,7 +969,7 @@ function per_track_summary() {
     }
     else {
 		run("New... ", "name="+title2+" type=Table width=250 height=600");
-		print(f, "\\Headings: \tTrack#\tLength (mins)\tAcc. Dist (um)\tEuc. Dist (um)\tPersistence\tAcc. Velocity (um/min)\tEuc. Velocity (um/min)\tClass\tStart Dist. COM (um)");
+		print(f, "\\Headings: \tTrack#\tLength (mins)\tAcc. Dist (um)\tEuc. Dist (um)\tPersistence\tAcc. Velocity (um/min)\tEuc. Velocity (um/min)\tClass\tStart Dist. COM (um)\tEnd Dist. COM (um)");
     }
 
 //get the track numbers in an array to use as the index
@@ -1067,6 +1067,20 @@ function per_track_summary() {
 		}
 	}
 
+//get final distance from array for each track
+
+	end_dist_com = newArray();
+	for (i=0; i<track_number.length; i++){
+
+		for (j=0; j<nResults; j++) {
+		 	if (getResultString("Track", j) == toString(track_number[i])){
+		 		comd = (getResult("Distance_from_COM_(um)", j));//removed calibartion form here as it is now calibrtated 060520
+		 	}
+		 	
+		}
+		end_dist_com = Array.concat(end_dist_com, comd);
+	}
+
 //calculate persistence for track as euclidean/accumulated
 	track_persistence = newArray();
 	for (i=0; i<track_number.length; i++){
@@ -1094,7 +1108,7 @@ function per_track_summary() {
 			print("Track "+track_number[i]+" excluded < 10 steps");
 		} 
 			else {
-				print(f, (number++)+"\t"+toString(track_number[i])+"\t"+(track_lengths[i])+"\t"+(max_distances[i])+"\t"+(euclidean_distances[i])+"\t"+(track_persistence[i])+"\t"+(track_speed[i])+"\t"+(e_track_speed[i])+"\t"+track_class[i]+"\t"+(dist_com[i]));
+				print(f, (number++)+"\t"+toString(track_number[i])+"\t"+(track_lengths[i])+"\t"+(max_distances[i])+"\t"+(euclidean_distances[i])+"\t"+(track_persistence[i])+"\t"+(track_speed[i])+"\t"+(e_track_speed[i])+"\t"+track_class[i]+"\t"+(dist_com[i])+"\t"+(end_dist_com[i]));
   			}
 	}
 }
