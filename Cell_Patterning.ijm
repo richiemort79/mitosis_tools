@@ -876,36 +876,9 @@ function basic_summary() {
 		}
 	}
 
-//calculate accumulated distance for each step
-	for (i=0; i<nResults; i++) {
-		if ((i==0) || (getResultString("Track", i) != getResultString("Track", i-1))) {//stops it looping between the first/last value if there is only 1 track
-			dist = 0;
-			speed = 0;
-		}
-		else {
-			if (getResultString("Track", i) == getResultString("Track", i-1)) {
-				x = getResult("X", i);
-				y = getResult("Y", i);
-				x1 = getResult("X", i-1);
-				y1 = getResult("Y", i-1);
-				dist = get_pythagoras(x,y,x1,y1,cal);
-       		 	speed = dist/time_step;
-			}
-		}
-		setResult("Distance_(um)", i, dist);
-    	setResult("Speed_(um/min)", i, speed);
-	}
 
-//sum the accumulated disances
-	setResult("Acc_Dist_(um)", 1 , 0);
-	for (i=0; i<nResults; i++) {
-		if (getResultString("Track", i) == getResultString("Track", i-1)) {
-			summed = (getResult("Distance_(um)", i) + getResult("Acc_Dist_(um)", i-1));
-			setResult("Acc_Dist_(um)", i, summed);
-  		}
-	}
-
-//calculate euclidean distance for each step
+//Calculate distance, accumulated distance, speed, and euclidean distance across each track
+//Get the x and y values of the track in question into an array
 	for (j=0; j<track_number.length; j++){
 		values_x = newArray();
 		values_y = newArray();
@@ -916,44 +889,104 @@ function basic_summary() {
 			}
 		}
 
-		///////////////////////////////////////
-		x = values_x[0];/////////////////////////////////
-		y = values_y[0];/////////////////////////////////////////////////If this is a daughter get x and y from the seed?
-		///////////////////////////////////////
-
+//Calculate distance through the mitosis instead of resetting from mother to daughter
+//Check if the track is a daughter
+	trackname = toString(track_number[j]);
+	trackappend = substring(trackname,trackname.length-1,trackname.length);
 		
+//If its a daughter get the mother track x y values	
+		if (trackappend == "a" || trackappend == "b") {
+			//print("Track is a daughter "+trackname);
+
+			mtrack = substring(trackname,0,trackname.length-1);
+			//print("Track mother is "+mtrack);
+			mvalues_x = newArray();
+		 	mvalues_y = newArray();
+		 	m_dist = newArray();
+			
+			for (k=0; k<nResults(); k++) {			
+			if (getResultString("Track", k) == mtrack){
+				mvalues_x = Array.concat(mvalues_x, getResult("X", k));
+				mvalues_y = Array.concat(mvalues_y, getResult("Y", k));
+				m_dist = Array.concat(m_dist, getResult("Acc_Dist_(um)", k));
+				
+			}
+		}		
+
+//Therefore if the track is a daughter X and Y will be the last entry for the mother track and ex and ey will be the first entry
+			x = mvalues_x[mvalues_x.length-1];
+			y = mvalues_y[mvalues_y.length-1];
+			ex = mvalues_x[0];
+			ey = mvalues_y[0];
+			mdis = m_dist[m_dist.length-1];
+		
+		} else {
+
+//Otherwise if the track is a new track X and Y will be the same as the first entry of the new track for both
+			x = values_x[0];
+			y = values_y[0];
+			ex = values_x[0];
+			ey = values_y[0];
+			mdis = 0;
+		
+		}
+
+//Calculate distance, accumulated distance, speed, and euclidean distance across each track
+//Define the arrays
+		dis_d = newArray(0);
+		speeds = newArray(0);
+		acc_dist = newArray(0);
+		persistence = newArray(0);
 		euc_d = newArray(0);
-		for (n=0; n<(values_x.length); n++) {
+
+//x1 and y1 are the first entries in values_x values_y
+		x1 = values_x[0];
+		y1 = values_y[0];
+
+//calculate distance speed euclidean distance for the first x y values
+		d_dist = get_pythagoras(x,y,x1,y1,cal);
+		speed = d_dist/time_step;
+		eucdist = get_pythagoras(ex,ey,x1,y1,cal);
+
+//populate the arrays
+		dis_d = Array.concat(dis_d, d_dist);
+		speeds = Array.concat(speeds, speed);
+		acc_dist = Array.concat(acc_dist, d_dist+mdis);
+		euc_d = Array.concat(euc_d, eucdist);
+		persistence = Array.concat(persistence, d_dist/eucdist);
+
+//Loop through the rest of the x y values and calculate
+		for (n=1; n<(values_x.length); n++) {			
+			x = values_x[n-1];
+			y = values_y[n-1];
 			x1 = values_x[n];
 			y1 = values_y[n];
-			eucdist = get_pythagoras(x,y,x1,y1,cal);
+			
+			d_dist = get_pythagoras(x,y,x1,y1,cal);
+			speed = d_dist/time_step;
+			eucdist = get_pythagoras(ex,ey,x1,y1,cal);
+			
+			dis_d = Array.concat(dis_d, d_dist);
+			speeds = Array.concat(speeds, speed);
+			prev_dist = acc_dist[n-1];
+			acc_dist = Array.concat(acc_dist, (prev_dist+d_dist));
 			euc_d = Array.concat(euc_d, eucdist);
+			persistence = Array.concat(persistence, d_dist/eucdist);
 		}
+
+//Write the arrays to the Results table		
     	index = -1;
     	for (k=0; k<nResults(); k++) {
     		if (getResultString("Track", k) == toString(track_number[j])) {
     		index = index + 1;
-    		value = euc_d[index];
-    		setResult("Euclidean_D_(um)", k, value);
+    		//value = euc_d[index];
+    		setResult("Distance_(um)", k, dis_d[index]);
+    		setResult("Acc_Dist_(um)", k, acc_dist[index]);
+			setResult("Speed_(um/min)", k, speeds[index]);
+    		setResult("Euclidean_D_(um)", k, euc_d[index]);
+    		setResult("Persistence", k, persistence[index]);	
     		}
-    	}
-	}
-
-//calculate persistence
-	euclidean = newArray();
-	accumulated = newArray();
-	persistence= newArray();
-	for (i=0; i<nResults; i++) {
-		euclidean = Array.concat(euclidean, getResult("Euclidean_D_(um)",i));
-		accumulated = Array.concat(accumulated, getResult("Acc_Dist_(um)",i));
-	}
-	for (j=0; j<euclidean.length; j++) {
-		value = euclidean[j] / accumulated[j];
-		persistence = Array.concat(persistence, value);
-	}
-	for (k=0; k<nResults; k++) {
-		value = persistence[k];
-		setResult("Persistence", k , value);
+    	}    
 	}
 }
 
