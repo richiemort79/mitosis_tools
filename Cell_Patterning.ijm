@@ -953,7 +953,7 @@ function basic_summary() {
 		speeds = Array.concat(speeds, speed);
 		acc_dist = Array.concat(acc_dist, d_dist+mdis);
 		euc_d = Array.concat(euc_d, eucdist);
-		//persistence = Array.concat(persistence, d_dist/eucdist);
+		//persistence = Array.concat(persistence, d_dist/eucdist); 020822 not sure why this doesn't work
 
 //Loop through the rest of the x y values and calculate
 		for (n=1; n<(values_x.length); n++) {			
@@ -971,7 +971,7 @@ function basic_summary() {
 			prev_dist = acc_dist[n-1];
 			acc_dist = Array.concat(acc_dist, (prev_dist+d_dist));
 			euc_d = Array.concat(euc_d, eucdist);
-			//persistence = Array.concat(persistence, d_dist/eucdist);
+			//persistence = Array.concat(persistence, d_dist/eucdist); 020822 not sure why this doesn't work
 		}
 
 //Write the arrays to the Results table		
@@ -980,11 +980,13 @@ function basic_summary() {
     		if (getResultString("Track", k) == toString(track_number[j])) {
     		index = index + 1;
     		//value = euc_d[index];
+    		setResult("Track_Time", k, index*time_step);
     		setResult("Distance_(um)", k, dis_d[index]);
+    		setResult("Distance^2_(um)", k, dis_d[index]*dis_d[index]); //squared displacement
     		setResult("Acc_Dist_(um)", k, acc_dist[index]);
 			setResult("Speed_(um/min)", k, speeds[index]);
     		setResult("Euclidean_D_(um)", k, euc_d[index]);
-    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	
+    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	//020822 calcualte persistence here
     		}
     	}    
 	}
