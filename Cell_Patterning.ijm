@@ -980,13 +980,15 @@ function basic_summary() {
     		if (getResultString("Track", k) == toString(track_number[j])) {
     		index = index + 1;
     		//value = euc_d[index];
-    		setResult("Track_Time", k, index*time_step);
+    		setResult("Track_Time", k, index*time_step); //020822 time from start of track
+    		//print(getResult("T_Length",k));
+    		setResult("Track_Time_Rev", k, (((getResult("T_Length",k)-1)-index))*time_step); //020822 time from start of track
     		setResult("Distance_(um)", k, dis_d[index]);
-    		setResult("Distance^2_(um)", k, dis_d[index]*dis_d[index]); //squared displacement
+    		setResult("Distance^2_(um)", k, dis_d[index]*dis_d[index]); //020822 squared displacement
     		setResult("Acc_Dist_(um)", k, acc_dist[index]);
 			setResult("Speed_(um/min)", k, speeds[index]);
     		setResult("Euclidean_D_(um)", k, euc_d[index]);
-    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	//020822 calcualte persistence here
+    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	//020822 calculate persistence here
     		}
     	}    
 	}
