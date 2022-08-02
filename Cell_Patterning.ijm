@@ -953,7 +953,7 @@ function basic_summary() {
 		speeds = Array.concat(speeds, speed);
 		acc_dist = Array.concat(acc_dist, d_dist+mdis);
 		euc_d = Array.concat(euc_d, eucdist);
-		persistence = Array.concat(persistence, d_dist/eucdist);
+		//persistence = Array.concat(persistence, d_dist/eucdist);
 
 //Loop through the rest of the x y values and calculate
 		for (n=1; n<(values_x.length); n++) {			
@@ -971,7 +971,7 @@ function basic_summary() {
 			prev_dist = acc_dist[n-1];
 			acc_dist = Array.concat(acc_dist, (prev_dist+d_dist));
 			euc_d = Array.concat(euc_d, eucdist);
-			persistence = Array.concat(persistence, d_dist/eucdist);
+			//persistence = Array.concat(persistence, d_dist/eucdist);
 		}
 
 //Write the arrays to the Results table		
@@ -984,7 +984,7 @@ function basic_summary() {
     		setResult("Acc_Dist_(um)", k, acc_dist[index]);
 			setResult("Speed_(um/min)", k, speeds[index]);
     		setResult("Euclidean_D_(um)", k, euc_d[index]);
-    		setResult("Persistence", k, persistence[index]);	
+    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	
     		}
     	}    
 	}
