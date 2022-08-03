@@ -876,7 +876,6 @@ function basic_summary() {
 		}
 	}
 
-
 //Calculate distance, accumulated distance, speed, and euclidean distance across each track
 //Get the x and y values of the track in question into an array
 	for (j=0; j<track_number.length; j++){
@@ -909,7 +908,6 @@ function basic_summary() {
 				mvalues_x = Array.concat(mvalues_x, getResult("X", k));
 				mvalues_y = Array.concat(mvalues_y, getResult("Y", k));
 				m_dist = Array.concat(m_dist, getResult("Acc_Dist_(um)", k));
-				
 			}
 		}		
 
@@ -928,15 +926,18 @@ function basic_summary() {
 			ex = values_x[0];
 			ey = values_y[0];
 			mdis = 0;
-		
 		}
 
-//Calculate distance, accumulated distance, speed, and euclidean distance across each track
+//Calculate distance, accumulated distance, speed, and euclidean distance for first time point
+
 //Define the arrays
+		d_dist = 0;
 		dis_d = newArray(0);
+		speed = 0;
 		speeds = newArray(0);
 		acc_dist = newArray(0);
 		persistence = newArray(0);
+		eucdist = 0;
 		euc_d = newArray(0);
 
 //x1 and y1 are the first entries in values_x values_y
@@ -949,29 +950,36 @@ function basic_summary() {
 		eucdist = get_pythagoras(ex,ey,x1,y1,cal);
 
 //populate the arrays
-		dis_d = Array.concat(dis_d, d_dist);
-		speeds = Array.concat(speeds, speed);
-		acc_dist = Array.concat(acc_dist, d_dist+mdis);
-		euc_d = Array.concat(euc_d, eucdist);
-		//persistence = Array.concat(persistence, d_dist/eucdist); 020822 not sure why this doesn't work
-
-//Loop through the rest of the x y values and calculate
+		dis_d = Array.concat(dis_d, 0); //does not roll through the mitosis
+		speeds = Array.concat(speeds, speed); //rolls through the mitosis
+		acc_dist = Array.concat(acc_dist, d_dist+mdis); //rolls through the mitosis
+		euc_d = Array.concat(euc_d, eucdist); //rolls through the mitosis
+		persistence = Array.concat(persistence, (eucdist/(d_dist+mdis))); //rolls through the mitosis
+		
+//Loop through the rest of the x y values and calculate for the whole track
+		d_dist = 0;
+		speed = 0;
+		pers = 0;
+		eucdist = 0;
+		
 		for (n=1; n<(values_x.length); n++) {			
 			x = values_x[n-1];
 			y = values_y[n-1];
 			x1 = values_x[n];
 			y1 = values_y[n];
-			
+
+//calculate the distances			
 			d_dist = get_pythagoras(x,y,x1,y1,cal);
 			speed = d_dist/time_step;
 			eucdist = get_pythagoras(ex,ey,x1,y1,cal);
-			
+
+//populate the arrays				
 			dis_d = Array.concat(dis_d, d_dist);
 			speeds = Array.concat(speeds, speed);
 			prev_dist = acc_dist[n-1];
 			acc_dist = Array.concat(acc_dist, (prev_dist+d_dist));
 			euc_d = Array.concat(euc_d, eucdist);
-			//persistence = Array.concat(persistence, d_dist/eucdist); 020822 not sure why this doesn't work
+			persistence = Array.concat(persistence, eucdist/(prev_dist+d_dist));
 		}
 
 //Write the arrays to the Results table		
@@ -979,16 +987,15 @@ function basic_summary() {
     	for (k=0; k<nResults(); k++) {
     		if (getResultString("Track", k) == toString(track_number[j])) {
     		index = index + 1;
-    		//value = euc_d[index];
-    		setResult("Track_Time", k, index*time_step); //020822 time from start of track
-    		//print(getResult("T_Length",k));
-    		setResult("Track_Time_Rev", k, (((getResult("T_Length",k)-1)-index))*time_step); //020822 time from start of track
+    		setResult("Track_Index", k, index); //020822 time from start of track in minutes
+    		setResult("Track_Time", k, index*time_step); //020822 time from start of track in minutes
+    		setResult("Track_Index_Rev", k, (((getResult("T_Length",k)-1)-index))); //020822 time from end of track in minutes
     		setResult("Distance_(um)", k, dis_d[index]);
     		setResult("Distance^2_(um)", k, dis_d[index]*dis_d[index]); //020822 squared displacement
     		setResult("Acc_Dist_(um)", k, acc_dist[index]);
 			setResult("Speed_(um/min)", k, speeds[index]);
     		setResult("Euclidean_D_(um)", k, euc_d[index]);
-    		setResult("Persistence", k, euc_d[index]/acc_dist[index]);	//020822 calculate persistence here
+    		setResult("Persistence", k, persistence[index]);
     		}
     	}    
 	}
