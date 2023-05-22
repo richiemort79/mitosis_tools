@@ -991,10 +991,10 @@ function basic_summary() {
     		setResult("Track_Time", k, index*time_step); //020822 time from start of track in minutes
     		setResult("Track_Index_Rev", k, (((getResult("T_Length",k)-1)-index))); //020822 time from end of track in minutes
     		setResult("Distance_(um)", k, dis_d[index]);
-    		setResult("Distance^2_(um)", k, dis_d[index]*dis_d[index]); //020822 squared displacement
     		setResult("Acc_Dist_(um)", k, acc_dist[index]);
 			setResult("Speed_(um/min)", k, speeds[index]);
     		setResult("Euclidean_D_(um)", k, euc_d[index]);
+    		setResult("Distance^2_(um)", k, euc_d[index]*euc_d[index]); //180523 squared displacement from euc dist
     		setResult("Persistence", k, persistence[index]);
     		}
     	}    
