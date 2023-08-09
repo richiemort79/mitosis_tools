@@ -19,11 +19,6 @@
 //									- All tracks that start and finish in the targetROI are also removed using this feature.
 //	Add Summary Stats Action Tool 	- Summarises the tracking data in the same results table
 //	Vector Windows Action Tool		- Calculates summary stats for sliding windows across the tracking data in a new table
-//	Summarise Windows Action Tool	- Summarises the windows data in a new table
-//									- Prints to the log the raw data summarised in the summary table for statistical anlysis
-//Plotting:
-//
-//	Parse to Mdf exports tracking data in mdf format for plotting with MTrackJ
 //
 //24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
 //Adding a track changes the source number 1, 2, 3, 4 etc
@@ -75,7 +70,7 @@ var angle = 0;
 var euc_dis = 0;
 var step = 6;//the size of the window in time steps
 var rcells = false;
-var dCmds = newMenu("Data Operations Menu Tool", newArray("Get Class and Trim", "Add Summary Stats", "Align Tracks", "Vector Windows", "Summarise Windows"));
+var dCmds = newMenu("Data Operations Menu Tool", newArray("Get Class and Trim", "Add Summary Stats", "Align Tracks", "Vector Windows"));
 
 macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0eD0fD10D11D1eD1fD20D27D28D2fD30D35D3aD3fD44D4bD53D5cD72D82Da3DacDb4DbbDc0Dc5DcaDcfDd0Dd7DdfDe0De1DeeDefDf0Df1Df2Df3DfcDfdDfeDffCcccDd4CfffD26D39D62D7dD92Db3Dc4Dc6Dd8CdefD22D2dDd2DddCaaaDe7CeffD04D0bD29D37D38D40D45D4fD54D55D64D6cD73D7bD83D8aD8dD99D9cDa8Db0DbfDc9Df4DfbCdefD5bD6aD6bDa9Db7Db8CcdfD14D41Db1CfffD12D1dD21D2eD34D36D43D63D93Dd1DdeDe2DedCdefD05D0aD13D1cD31D3eD50D5fDa0DafDc1DceDe3DecDf5DfaC58cD97CeefD46D47D56D65D84CdeeD9dCbdfDebCbcdDadCeefD49D4aD58D59D5aD67D68D69D6dD7cD8cDa5Da6Db5Db6Dc7Dc8CcefD06D09D60D6fD90D9fDf6Df9C58cD75D76D77D78D79D86D87D88CeefD48D57D66D94D95Da4CddeD24D42Dd5CcdeD3dCbbcD3cDe6C9aaDbdCeeeD2aCbdfD07D08D70D7fD80D8fDf7Df8CaceD96CeffD3bCdddD71CccdDe5CabbDe9C999D7eD8eCdefD8bD9aD9bDaaDabDb9DbaCcdfD1bDe4CbcdDcdDdcCddeD15D51CcdeD1aDa1Dc2Dd3CbbdDaeCaabD9eDdbCeeeDa2CbdeDa7DbeCdddD17D19D81CccdDc3CaabD6eC9aaDccCdefD23D32CcdfD4eCbcdDdaCcdeD2cCaaaDe8CbceD74D85CddeD16D33D61D91CcddD5dDb2CbbbD4dCbcdD5eDeaCdeeDbcDcbDd9CccdD2b"
 {
@@ -663,11 +658,6 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		}
 	}
 
-//Summarise windows operation/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	else if (cmd=="Summarise Windows"){
-		summarise_windows();
-	}
-}
 
 //////////////////////////////////////////////////////////////////////FUCNTIONS HERE//////////////////////////////////////////////////////////////////////
 
@@ -1172,141 +1162,6 @@ function per_track_summary() {
 	}
 }
 
-function summarise_windows() {
-//summarises the stats for the windows into a separate table
-
-//draws the summary table
-    requires("1.41g");
-    title1 = "Hourly Summary Table";
-	title2 = "["+title1+"]";
-	f = title2;
-  	if (isOpen(title1)) {
- 	}
-  		else {
-			run("New... ", "name="+title2+" type=Table width=500 height=600");
-    	    print(f, "\\Headings: Class\tTime from Entry (mins)\tNumber\tMean Angle\tSE\tMean Euc. Dis (um)\tSE\tMean Euc. Speed (um/min)\tSE\tMean Acc. Dis (um)\tSE\tMean Acc. Speed (um/min)\tSE\tMean Persistence\tSE");//\tMean P/D\tStDev");
-   	 	}
-
-	if (isOpen("Log")){
-				selectWindow("Log");
-				run("Close");
-				}
-
-//print raw data to log for stats
-	print("Class",",","Entry_Time",",","E_Angle",",","E_Dis",",","E_Speed",",","A_Dis",",","A_Speed",",","Pers");
-
-//prompt for time step and window to allow for multiple analyses - prompt for calibration of image
-	Dialog.create("Please set window size and time_step");
-	Dialog.addNumber("Time Step (min):", 10);
-	Dialog.addNumber("Window (min):", 60);
-	Dialog.show();
-	time_step = Dialog.getNumber();
-	window = Dialog.getNumber();
-	t_steps = window/time_step;
-
-	max_length = 0;
-//max steps
-	for (a=0; a<nResults(); a++) {
-		if (getResult("T_Length",a)>max_length){
-			max_length = getResult("T_Length",a);
-		}
-			else{};
-	}
-	hour_index = newArray();
-	entry_time = newArray();
-	start = 1;
-	start1 = 0;
-	hour_index = Array.concat(hour_index, start);
-	entry_time = Array.concat(entry_time, start1);
-	entry = 0;
-	while ((entry+(t_steps+1)) < max_length) {
-		entry = entry + (t_steps+1);
-		hour_index = Array.concat(hour_index,entry);
-	}
-
-	for (q=1; q<hour_index.length; q++) {
-		start1 = start1 + window;
-		entry_time = Array.concat(entry_time, start1);
-	}
-//generate an array with the classes in
-	classes = newArray(" No-No", " No-Yes");
-
-//summarise all
-	for (z=0; z<classes.length; z++) {
-		for (j=0; j<hour_index.length; j++) {
-//specify your arrays here
-			n_tracks = 0;//number of tracks in the window
-			e_angle = newArray();
-			e_distance = newArray();
-			e_speed = newArray();
-			a_dis = newArray();
-			a_speed = newArray();
-			pers = newArray();
-			pxd = newArray();
-
-			for (k=0; k<nResults; k++) {
-				if ((getResultString("Class", k) == classes[z]) && (getResult("-Index", k) == hour_index[j])) {
-//populate your arrays here
-				test_angle1 = getResult(window+"-min Euc. Angle", k);
-				test_angle2 = d2s(test_angle1, 0);
-				if (test_angle2 == "NaN") {} else {e_angle = Array.concat(e_angle, test_angle1);}
-				test_e_dis1 = getResult(window+"-min Euc. Dis (um)", k);
-				test_e_dis2 = d2s(test_e_dis1, 0);
-				if (test_e_dis2 == "NaN") {} else {e_distance = Array.concat(e_distance, test_e_dis1);}
-				test_e_speed1 = getResult(window+"-min Euc. Speed (um/min)", k);
-				test_e_speed2 = d2s(test_e_speed1, 0);
-				if (test_e_speed2 == "NaN") {} else {e_speed = Array.concat(e_speed, test_e_speed1);}	
-				test_a_dis1 = getResult(window+"-min Acc. Dis (um)", k);
-				test_a_dis2 = d2s(test_a_dis1, 0);	
-				if (test_a_dis2 == "NaN") {} else {a_dis = Array.concat(a_dis, test_a_dis1);}
-				test_a_speed1 = getResult(window+"-min Acc. Speed (um/min)", k);
-				test_a_speed2 = d2s(test_a_speed1, 0);
-				if (test_a_speed2 == "NaN") {} else { a_speed = Array.concat(a_speed, test_a_speed1);}	
-				}
-			}
-//calculate persistece from e_dis and a_speed
-			for (b=0; b<e_distance.length; b++) {
-			 	pers1 = e_distance[b]/a_dis[b];
-			 	pers2 = d2s(pers1, 0);
-			 	if (pers2 == "NaN") {
-			 		pers1 = 0;
-			 		pers = Array.concat(pers, pers1);
-			 	} 
-			 	else {
-					pers = Array.concat(pers, pers1);
-				}
-			}
-			class = classes[z];
-			time_entry = (entry_time[j]);
-			nTracks = e_angle.length;
-			Array.getStatistics(e_angle, min, max, mean, stdDev);
-			mean_angle = mean;
-			se_angle = (stdDev)/sqrt(e_angle.length);
-			Array.getStatistics(e_distance, min, max, mean, stdDev);
-			mean_e_dis = mean;
-			se_e_dis = (stdDev)/sqrt(e_distance.length);
-			Array.getStatistics(e_speed, min, max, mean, stdDev);
-			mean_e_speed = mean;
-			se_e_speed = (stdDev)/sqrt(e_speed.length);
-			Array.getStatistics(a_dis, min, max, mean, stdDev);
-			mean_a_dis = mean;
-			se_a_dis = (stdDev)/sqrt(a_dis.length);
-			Array.getStatistics(a_speed, min, max, mean, stdDev);
-			mean_a_speed = mean;
-			se_a_speed = (stdDev)/sqrt(a_speed.length);
-			Array.getStatistics(pers, min, max, mean, stdDev);
-			mean_pers = mean;
-			se_pers = (stdDev)/sqrt(pers.length);
-			Array.getStatistics(pxd, min, max, mean, stdDev);
-			mean_pxd = mean;
-			se_pxd = (stdDev)/sqrt(pxd.length);
-
-			for (t=0; t<(e_angle.length); t++) {
-				print(class+","+time_entry+","+e_angle[t]+","+e_distance[t]+","+e_speed[t]+","+a_dis[t]+","+a_speed[t]+","+pers[t]);
-			}
-			print(f, class+"\t"+time_entry+"\t"+nTracks+"\t"+mean_angle+"\t"+se_angle+"\t"+mean_e_dis+"\t"+se_e_dis+"\t"+mean_e_speed+"\t"+se_e_speed+"\t"+mean_a_dis+"\t"+se_a_dis+"\t"+mean_a_speed+"\t"+se_a_speed+"\t"+mean_pers+"\t"+se_pers);
-		}
-	}
 
 function list_no_repeats (table, heading) {
 //Returns an array of the entries in a column without repeats to use as an index
