@@ -432,8 +432,8 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 				table = getInfo("window.name");
 				selectWindow(table);
 				tdir = getDirectory("temp");
-				saveAs("Text", tdir+Image+"Tracking_Results.xls");
-				open(tdir+Image+"Tracking_Results.xls");
+				saveAs("Text", tdir+"Results.xls");
+				open(tdir+"Results.xls");
 				basic_summary();
 				per_track_summary();
 			}
