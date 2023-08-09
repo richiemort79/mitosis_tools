@@ -413,7 +413,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 	cmd = getArgument();
 
 //Summary stats operation/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	else if (cmd=="Add Summary Stats"){
+	if (cmd=="Add Summary Stats"){
 
 //if the results table is empty prompt for a results table - prompt for calibration of image
 		Dialog.create("Please set calibration values");
