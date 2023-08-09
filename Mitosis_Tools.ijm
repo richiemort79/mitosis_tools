@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//A simple tool to aid in the manual tracking of fluorescently labeled cells and in the processing of the tracking data
+//A simple tool to aid in the manual tracking of fluorescently labeled cells through mitosis and in the processing of the tracking data
 //The cells/objects are tracked in relation to a defined targetROI (e.g. A Hair Follicle Condensate)
 //Installation: Place Mitosis_Tools.ijm in /fiji/macros/toolsets and restart
 //Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
@@ -7,7 +7,7 @@
 
 //Tracking:
 
-//	Initialize Action Tool - Initializes the tracking and finds a population of cells to track. Specifies the future follicle condensate. If the manager remains empty see line 183.
+//	Initialize Action Tool - Initializes the tracking. Specifies the future follicle condensate.
 //	Manual Track Tool - Allows manual tracking of individual cells
 //	Adding a track changes the source number 1, 2, 3, 4 etc
 //	Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses
