@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //A simple tool to aid in the manual tracking of fluorescently labeled cells and in the processing of the tracking data
 //The cells/objects are tracked in relation to a defined targetROI (e.g. A Hair Follicle Condensate)
-//Installation: Place Cell_Patterning.ijm in /fiji/macros/toolsets and restart
+//Installation: Place Mitosis_Tools.ijm in /fiji/macros/toolsets and restart
 //Results are recorded in the same format as the manual tracking tool (http://rsbweb.nih.gov/ij/plugins/track/track.html)
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND - please refer to the separate license 
 
@@ -9,20 +9,14 @@
 
 //	Initialize Action Tool - Initializes the tracking and finds a population of cells to track. Specifies the future follicle condensate. If the manager remains empty see line 183.
 //	Manual Track Tool - Allows manual tracking of individual cells
-//	Add Track Action Tool - Move on to the next cell
+//	Adding a track changes the source number 1, 2, 3, 4 etc
+//	Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses
 
 //Processing:
 
-//	Get Class and Trim Action Tool 	- Classifies the tracks depending on their relationship to the follicle condensate, throws away track that start in the condensate, trims portions of tracks that are within the condensate
-//									- The trim function removes the portion of a track after the first contact with the targetROI if that track ultimately finishes in the target ROI
-//									- This is useful in discriminating between behaviours inside and outside the targetROI
-//									- All tracks that start and finish in the targetROI are also removed using this feature.
 //	Add Summary Stats Action Tool 	- Summarises the tracking data in the same results table
-//	Vector Windows Action Tool		- Calculates summary stats for sliding windows across the tracking data in a new table
-//
-//24th March 2020 adding functionality for recording subtracks to follow the daughters of a mitosis
-//Adding a track changes the source number 1, 2, 3, 4 etc
-//Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses
+//	Align Tracks Action Tool 		- Aligns tracks in the log with the mitosis point at 0 mothers behind and daughters ahead
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Global variables for cell tracking
@@ -70,7 +64,7 @@ var angle = 0;
 var euc_dis = 0;
 var step = 6;//the size of the window in time steps
 var rcells = false;
-var dCmds = newMenu("Data Operations Menu Tool", newArray("Get Class and Trim", "Add Summary Stats", "Align Tracks", "Vector Windows"));
+var dCmds = newMenu("Data Operations Menu Tool", newArray("Add Summary Stats", "Align Tracks"));
 
 macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0eD0fD10D11D1eD1fD20D27D28D2fD30D35D3aD3fD44D4bD53D5cD72D82Da3DacDb4DbbDc0Dc5DcaDcfDd0Dd7DdfDe0De1DeeDefDf0Df1Df2Df3DfcDfdDfeDffCcccDd4CfffD26D39D62D7dD92Db3Dc4Dc6Dd8CdefD22D2dDd2DddCaaaDe7CeffD04D0bD29D37D38D40D45D4fD54D55D64D6cD73D7bD83D8aD8dD99D9cDa8Db0DbfDc9Df4DfbCdefD5bD6aD6bDa9Db7Db8CcdfD14D41Db1CfffD12D1dD21D2eD34D36D43D63D93Dd1DdeDe2DedCdefD05D0aD13D1cD31D3eD50D5fDa0DafDc1DceDe3DecDf5DfaC58cD97CeefD46D47D56D65D84CdeeD9dCbdfDebCbcdDadCeefD49D4aD58D59D5aD67D68D69D6dD7cD8cDa5Da6Db5Db6Dc7Dc8CcefD06D09D60D6fD90D9fDf6Df9C58cD75D76D77D78D79D86D87D88CeefD48D57D66D94D95Da4CddeD24D42Dd5CcdeD3dCbbcD3cDe6C9aaDbdCeeeD2aCbdfD07D08D70D7fD80D8fDf7Df8CaceD96CeffD3bCdddD71CccdDe5CabbDe9C999D7eD8eCdefD8bD9aD9bDaaDabDb9DbaCcdfD1bDe4CbcdDcdDdcCddeD15D51CcdeD1aDa1Dc2Dd3CbbdDaeCaabD9eDdbCeeeDa2CbdeDa7DbeCdddD17D19D81CccdDc3CaabD6eC9aaDccCdefD23D32CcdfD4eCbcdDdaCcdeD2cCaaaDe8CbceD74D85CddeD16D33D61D91CcddD5dDb2CbbbD4dCbcdD5eDeaCdeeDbcDcbDd9CccdD2b"
 {
@@ -432,42 +426,6 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 {
 	cmd = getArgument();
 
-//Get class and trim operation/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (cmd=="Get Class and Trim") {
-
-//if the results table is empty prompt for a results table
-		if (isOpen("Results")) {
-			getClass();
-		}
-			else {
-				waitForUser("There is no Results table open please select a tracking table or press cancel");
-				table = getInfo("window.name");
-				selectWindow(table);
-				tdir = getDirectory("temp");
-				saveAs("Text", tdir+Image+"Tracking_Results.xls");
-				open(tdir+Image+"Tracking_Results.xls");
-				getClass();
-			}
-		updateResults();
-		Dialog.create("Trim Data?");
-		Dialog.addMessage("If you would like to trim the data on yes press OK, otherwise cancel");
-		Dialog.show();
-		track_number = list_no_repeats ("Results", "Track");
-
-		for (i=0; i<track_number.length; i++){
-			var flag = true;
-
-			for (j=0; j<nResults; j++){
-				if (getResultString("Track", j) == toString(track_number[i]) && getResultString("Inside?", j) == "Yes") {flag = false;}
-				if (getResultString("Track", j) == toString(track_number[i]) && !flag) {setResult("Flag", j, "Delete");}
-			}
-		}
-		updateResults();
-		
-//loop through and delete all the entries flagged "Delete"
-		deleteChosenRows("Flag", "Delete", "Class", "No-No");
-}
-
 //Summary stats operation/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	else if (cmd=="Add Summary Stats"){
 
@@ -503,161 +461,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		align_data("Euclidean_D_(um)");
 		align_data("Persistence");
 	}
-	
-
-//Vector windows operation/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	else if (cmd=="Vector Windows"){
-
-//looping through tracking data and calcualting the angle from com euclidean and speed for hour long windows
-
-//prompt for the window size required and confirm the time step - prompt for calibration of image
-		Dialog.create("Please specicify the window size");
-		Dialog.addNumber("Time Step (min):", time_step);
-		Dialog.addNumber("Window length (min):", (step*time_step));
-		Dialog.show();
-		time_step = Dialog.getNumber();
-		step = Dialog.getNumber();
-		step = step/time_step;
-		prefix = step*time_step;
-
-//calculate distance for each step
-		for (i=0; i<nResults; i++) {
-			if (getResultString("Track", i) == getResultString("Track", i-1)) {
-				x = getResult("X", i);
-				y = getResult("Y", i);
-				x1 = getResult("X", i-1);
-				y1 = getResult("Y", i-1);
-    		    dist = get_pythagoras(x,y,x1,y1,cal);
-    		    speed = dist/time_step;
-    		    setResult(prefix+"-min Distance (um)", i, dist);
-    		    setResult(prefix+"-min Speed (um/min)", i, speed);
-			}
-		}
-
-//get the track numbers in an array to use as the index
-		track_number = list_no_repeats ("Results", "Track");
-
-		for (i=0; i<track_number.length; i++){
-			values_x = newArray();
-			values_y = newArray();
-			values_x2 = newArray();
-			values_y2 = newArray();
-			j_values = newArray();
-			the_angle = newArray();
-			euc_dis_a = newArray();
-			euc_speed = newArray();
-			distance = newArray();
-			a_distance = newArray();
-
-			for (j=0; j<nResults; j++) {
-
-				if (getResultString("Track", j) == toString(track_number[i])){
-					x_val = getResult("X", j);
-					values_x = Array.concat(values_x, x_val);
-					x2_val = getResult("Follicle_COMX", j);
-					values_x2 = Array.concat(values_x2, x2_val);
-					y_val = getResult("Y", j);
-					values_y = Array.concat(values_y, y_val);
-					y2_val = getResult("Follicle_COMX", j);
-					values_y2 = Array.concat(values_y2, y2_val);
-					j_values = Array.concat(j_values, j);
-					dist = getResult("Distance_(um)", j);
-					distance = Array.concat(distance, dist);
-				}
-
-			}
-
-			for (d=0; d<values_x.length-step; d++){
-
-//the first x, y positions are x and y
-				x = values_x[d];
-				y = values_y[d];
-
-//the first COM positions are x2 and y2
-				x2 = values_x2[d];
-				y2 = values_y2[d];
-
-//the forward x, y  positions are x1 and y1
-				x1 = values_x[d+step];
-				y1 = values_y[d+step];
-
-//put results in array and call function
-				xarray = newArray(x,x1,x2);
-				yarray = newArray(y,y1,y2);
-
-				law_of_cosines(xarray, yarray);
-				the_angle = Array.concat(the_angle, angle);
-				euc_dis_a = Array.concat(euc_dis_a, euc_dis);
-				euc_speed = Array.concat(euc_speed, (euc_dis/(step*time_step)));
-
-				accumulated = 0;
-				count = 0;
-
-				while (count <= step){
-					accumulated = accumulated + distance[d+count];	
-					count++;
-				}
-
-				a_distance = Array.concat(a_distance, accumulated);
-
-			}
-
-//loop through all results and write the window
-			for (r=0; r<nResults; r++) {
-				setResult("Most Recent Window (min)", r, (step*time_step));
-			}
-
-//write back to the results table
-			for (n=0; n<j_values.length-step; n++) {
-				index = j_values[n];
-				setResult(prefix+"-min Euc. Angle", index, (the_angle[n]));
-				setResult(prefix+"-min Euc. Dis (um)", index, (euc_dis_a[n]));
-				setResult(prefix+"-min Euc. Speed (um/min)", index, (euc_speed[n]));
-				setResult(prefix+"-min Acc. Dis (um)", index, (a_distance[n]));
-			}
-		}
-
-//get speed
-		for (c=0; c<nResults; c++) {
-			if (getResult(prefix+"-min Acc. Dis (um)", c)>0) {
-				d = getResult(prefix+"-min Acc. Dis (um)", c);
-				sp = d/(step*time_step);
-				setResult(prefix+"-min Acc. Speed (um/min)", c, sp);
-			}
-		}
-
-//get the persistence
-		for (h=0; h<nResults; h++) {
-			persistence = (getResult(prefix+"-min Euc. Dis (um)", h)) / (getResult(prefix+"-min Acc. Dis (um)", h));
-			setResult(prefix+"-min Pers", h, persistence);
-		}
-
-//negatively number a track from the final timepoint
-//get the slices into an array
-
-		i = 0;
-		j = 0;
-
-		for (i=0; i<track_number.length; i++){
-			slices = newArray();
-				for (j=0; j<nResults; j++) {
-					if (getResultString("Track", j) == toString(track_number[i])){
-						slices = Array.concat(slices, getResult("Frame", j));
-					}
-				}
-			Array.getStatistics(slices, min, max, mean, stdDev);
-			Array.reverse(slices);
-
-			for (j=0; j<nResults; j++) {
-				if ((getResultString("Track", j) == track_number[i])&(max>step)){
-					setResult("-Index", j, (max-step));
-					max = max-1;
-				}
-			}
-
-		}
-	}
-
+}
 
 //////////////////////////////////////////////////////////////////////FUCNTIONS HERE//////////////////////////////////////////////////////////////////////
 
