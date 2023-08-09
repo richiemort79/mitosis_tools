@@ -16,7 +16,7 @@
 //Processing:
 
 //	Add Summary Stats Action Tool 	- Summarises the tracking data in the same results table
-//	Align Tracks Action Tool 		- Aligns tracks in the log with the mitosis point at 0 - mothers behind and daughters ahead
+//	Align Tracks Action Tool 		- Aligns tracks in the log with the mitosis point at 0 - mothers behind and daughters ahead RUM SUMMARY STATS FIRST
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -433,6 +433,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 				selectWindow(table);
 				tdir = getDirectory("temp");
 				saveAs("Text", tdir+"Results.xls");
+				run("Close");
 				open(tdir+"Results.xls");
 				basic_summary();
 				per_track_summary();
@@ -440,12 +441,14 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 	}
 
 	else if (cmd=="Align Tracks") {
+		
 		align_data("Distance_from_COM_(um)");
 		align_data("Distance_(um)");
 		align_data("Speed_(um/min)");
 		align_data("Acc_Dist_(um)");
 		align_data("Euclidean_D_(um)");
 		align_data("Persistence");
+		
 	}
 }
 
@@ -951,7 +954,6 @@ function per_track_summary() {
   			}
 	}
 }
-
 
 function list_no_repeats (table, heading) {
 //Returns an array of the entries in a column without repeats to use as an index
