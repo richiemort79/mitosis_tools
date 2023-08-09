@@ -9,13 +9,14 @@
 
 //	Initialize Action Tool - Initializes the tracking. Specifies the future follicle condensate.
 //	Manual Track Tool - Allows manual tracking of individual cells
-//	Adding a track changes the source number 1, 2, 3, 4 etc
-//	Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses
+//	Adding a track changes the source number 1, 2, 3, 4 etc use this to start tracking a mother
+//	Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses)
+//	Switch Daughter to finsh tracking daughter a and start tracking daughter b
 
 //Processing:
 
 //	Add Summary Stats Action Tool 	- Summarises the tracking data in the same results table
-//	Align Tracks Action Tool 		- Aligns tracks in the log with the mitosis point at 0 mothers behind and daughters ahead
+//	Align Tracks Action Tool 		- Aligns tracks in the log with the mitosis point at 0 - mothers behind and daughters ahead
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,8 +58,6 @@ var sample = 5;
 var Image = "";
 var dir = "";
 var tdir = getDirectory("temp");
-
-
 
 var angle = 0;
 var euc_dis = 0;
