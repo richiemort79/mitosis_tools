@@ -58,7 +58,7 @@ var sample = 5;
 var Image = "";
 var dir = "";
 var tdir = getDirectory("temp");
-
+	
 var angle = 0;
 var euc_dis = 0;
 var step = 6;//the size of the window in time steps
@@ -94,8 +94,6 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 
 	getDimensions(width, height, channels, slices, frames);
 
-//print(slices);
-
 //prompt for calibration of image
 	Dialog.create("Please set calibration values");
 	Dialog.addNumber("Time Step (min):", 10);
@@ -126,7 +124,6 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	run("Select None");
 	saveAs("Tiff", dir+Image+"_ROI_First.tif");
 	run("Close");
-
 	run("Select None");
 	setSlice(slices);
 	run("Duplicate...", " ");
@@ -294,10 +291,7 @@ run("Restore Selection");
 
 //some variables
 	track = toString(gtrack)+toString(daughter);
-    //print(track);
-    slice = getSliceNumber();
-    
-    
+    slice = getSliceNumber(); 
     width = getWidth();
     height = getHeight();
 
@@ -328,10 +322,6 @@ run("Restore Selection");
 	//get nearest distance to the skeleton
 	posx = x;
 	posy = y;
-	//Array.print(xpoints);
-	//Array.print(ypoints);
-	//print(x);
-	//print(y);
 	get_s_dist(x, y, xpoints, ypoints, cal);
     dist = shortest;
 
@@ -399,8 +389,6 @@ macro "Add Mitosis Action Tool - CfffD00D01D02D03D04D05D06D07D08D09D0aD0cD0dD0eD
 
 	//get the last line of the table to use as the first timepoint
 	mitosis = last_line;
-	//print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);//////DELETE THIS LINE????????????????!!!!!!!!!!!!!!!!!!1
-	//need to remember location and get an ROI for that
 }
 
 macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD10D11D12D17D18D1dD1eD1fD20D21D22D27D28D2dD2eD2fD30D31D32D3dD3eD3fD40D41D42D4dD4eD4fD50D51D52D5dD5eD5fD60D61D62D6dD6eD6fD70D71D72D7dD7eD7fD80D81D82D8dD8eD8fD90D91D92D9dD9eD9fDa0Da1Da7Da8DaeDafDb0DbfDc0Dc1DceDcfDd0Dd1Dd2Dd7Dd8DddDdeDdfDe0De1De2De3De6De7De8De9DecDedDeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC594D0bD29D39Db2CcdcD6cDadC9c9DabDbbDcaC383D4cCcebD14D15D24D34C8b8D8bC5a4D0aD93CdedDa2CacaD47D48C464DdcCcdcD97C7b7D5aC695De5CdedD63C9c9D8aD9aC474DdbC9c8D1aD1bD2aD84D85D95Da4Da5Db4DcbC6a5Da3CfffD37D38CbdaD66D67C362Db8C7b6D83D86C595D59D75D76D96Db6Dc6Dd4Dd5C9c9D54D94D9bDaaDbaC483D2cC8c8D2bD3aDb5Dc4C5a5D09D26CadaD56D78C474Dc8DccC7b7Db3C695D5cD7bCac9D65D73C584D6aD99C6b5D03D04D05D13D23D33CbebD25D35D44D45C262Da9C6a6D49D5bD64D74C595Dd6C483D3cD87Da6C8c8D3bD4aDc5C5a4D19CadaD68D79C373D88C8a8D7cC484DdaC6b5D06CbdbD55C373Db7C494D0cD1cC6a5D16D43C474DeaDebC8b7D46D53Db1Cad9D7aC585Dc9C252D9cC6a6Dd3C8c8D4bC474D8cDd9C8b7D69D77D89C575DbeC363DacC484D58C363DcdC5a5D36C484Dc7C6a5Dc3C373D6bC585Db9C696De4C7b7D57C6a6Dc2"
@@ -417,7 +405,6 @@ macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD
 		daughter = "b";
 	}
 	waitForUser("The track has switched to "+gtrack+daughter);
-	//print(f,(number++)+"\t"+Image+"\t"+gtrack+daughter+"\t"+is_seed+"\t"+mitosis);//////DELETE THIS LINE????????????????!!!!!!!!!!!!!!!!!!1
 }
 
 
