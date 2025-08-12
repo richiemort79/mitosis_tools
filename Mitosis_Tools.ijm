@@ -97,7 +97,7 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 
 //prompt for calibration of image
 	Dialog.create("Please set calibration values");
-	Dialog.addNumber("Time Step (min):", 10);
+	Dialog.addNumber("Time Step (min):", 2);
 	Dialog.addNumber("Scale (um/px):", 0.619);
 	Dialog.addCheckbox("Find random cells?", false);
 	Dialog.addNumber("Number of random cells:", 5);
@@ -351,6 +351,10 @@ macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D
 	cell_area = get_area(x, y);
 	cell_feret = get_feret(x, y);
 	cell_circ = get_circ(x,y);
+	
+//get centre of mass 
+	com_x = get_com_x(x,y);
+	com_y = get_com_y(x,y);
 
 // Clear old Results if open
     if (isOpen("Results")) {
@@ -372,8 +376,8 @@ macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D
 	}
     
 //Print to the results table    
-    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ);
-	last_line = ""+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ;
+    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(com_x)+"\t"+(com_y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ);
+	last_line = ""+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(com_x)+"\t"+(com_y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ;
 	
 	
 //advance to next slice
@@ -1127,9 +1131,9 @@ print("Seed tracks aligned for "+column);
 
 
 function get_area(x, y) {
-// Duplicate local area
-    makeRectangle(x - 50, y - 50, 100, 100);
-    run("Duplicate...", "title=local_area");
+// Duplicate 
+    run("Select None");
+    run("Duplicate...", "title=duplicate");
 
 // Convert to binary
     run("Auto Threshold", "method=Default white stack");
@@ -1139,7 +1143,7 @@ function get_area(x, y) {
     run("Set Measurements...", "area redirect=None decimal=4");
 
 // Select cell near centre of ROI
-    doWand(50, 50);
+    doWand(x, y);
 
 // Clear old Results if open
     if (isOpen("Results")) {
@@ -1159,9 +1163,9 @@ function get_area(x, y) {
 }
 
 function get_feret(x, y) {
-// Duplicate local area
-    makeRectangle(x - 50, y - 50, 100, 100);
-    run("Duplicate...", "title=local_area");
+// Duplicate 
+    run("Select None");
+    run("Duplicate...", "title=duplicate");
 
 // Convert to binary
     run("Auto Threshold", "method=Default white stack");
@@ -1171,7 +1175,7 @@ function get_feret(x, y) {
     run("Set Measurements...", "feret's redirect=None decimal=4");
 
 // Select cell near centre of ROI
-    doWand(50, 50);
+    doWand(x, y);
 
 // Clear old Results if open
     if (isOpen("Results")) {
@@ -1191,10 +1195,10 @@ function get_feret(x, y) {
 }
 
 function get_circ(x, y) {
-// Duplicate local area
-    makeRectangle(x - 50, y - 50, 100, 100);
-    run("Duplicate...", "title=local_area");
-
+// Duplicate 
+    run("Select None");
+    run("Duplicate...", "title=duplicate");
+    
 // Convert to binary
     run("Auto Threshold", "method=Default white stack");
 	run("BinaryFilterReconstruct ", "erosions=1 white"); 
@@ -1203,7 +1207,7 @@ function get_circ(x, y) {
     run("Set Measurements...", "shape redirect=None decimal=4");
 
 // Select cell near centre of ROI
-    doWand(50, 50);
+    doWand(x, y);
 
 // Clear old Results if open
     if (isOpen("Results")) {
@@ -1220,4 +1224,66 @@ function get_circ(x, y) {
 
     return cell_circ;
 }
+
+function get_com_x(x, y) {
+// Duplicate 
+    run("Select None");
+    run("Duplicate...", "title=duplicate");
+
+// Convert to binary
+    run("Auto Threshold", "method=Default white stack");
+	run("BinaryFilterReconstruct ", "erosions=1 white"); 
+
+// Set measurements
+    run("Set Measurements...", "center redirect=None decimal=4");
+
+// Select cell near centre of ROI
+    doWand(x, y);
+
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+// Measure and return area
+    run("Measure");
+    com_x = getResult("XM", 0);
+
+// Close local area window
+    close();
+
+    return com_x;
+}
+function get_com_y(x, y) {
+// Duplicate 
+    run("Select None");
+    run("Duplicate...", "title=duplicate");
+
+// Convert to binary
+    run("Auto Threshold", "method=Default white stack");
+	run("BinaryFilterReconstruct ", "erosions=1 white"); 
+
+// Set measurements
+    run("Set Measurements...", "center redirect=None decimal=4");
+
+// Select cell near centre of ROI
+    doWand(x, y);
+
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+// Measure and return area
+    run("Measure");
+    com_y = getResult("YM", 0);
+
+// Close local area window
+    close();
+
+    return com_y;
+}
+
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
