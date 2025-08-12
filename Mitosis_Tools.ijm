@@ -294,6 +294,9 @@ run("Restore Selection");
     slice = getSliceNumber(); 
     width = getWidth();
     height = getHeight();
+    cell_area = 0;
+    cell_feret = 0;
+    cell_circ = 0;
 
 //draws the tracking table
     requires("1.41g");
@@ -305,10 +308,10 @@ run("Restore Selection");
 	}
 		else {
 			run("Table...", "name="+title2+" width=1000 height=300");
-			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?");
+			print(f, "\\Headings: \tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
 		}
 
-    //run("Colors...", "foreground=white background=white selection=cyan");
+	//run("Colors...", "foreground=white background=white selection=cyan");
     autoUpdate(false);
     getCursorLoc(x, y, z, flags);
     //makePoint(x, y);
@@ -319,12 +322,27 @@ run("Restore Selection");
     //run("Colors...", "foreground=white background=white selection=red");
     run("Enlarge...", "enlarge=5");
 
-	//get nearest distance to the skeleton
+	setBatchMode(true);
+
+//get nearest distance to the skeleton
 	posx = x;
 	posy = y;
 	get_s_dist(x, y, xpoints, ypoints, cal);
     dist = shortest;
+    
+//get morphology
+	cell_area = get_area(x, y);
+	cell_feret = get_feret(x, y);
+	cell_circ = get_circ(x,y);
 
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+	setBatchMode(false);
+	
 //is the xy position within the condensate at this time point?
     inside = "No";
 
@@ -332,8 +350,8 @@ run("Restore Selection");
        if ((x == x_values[i]) && (y == y_values[i])) {inside = "Yes";} else {}
     }
 
-    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside);
-	last_line = ""+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside;
+    print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ);
+	last_line = ""+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ;
 //advance to next slice
     run("Next Slice [>]");
     selectWindow(Image);
@@ -1081,4 +1099,99 @@ print("Seed tracks aligned for "+column);
 	}
 }
 
+
+function get_area(x, y) {
+// Duplicate local area
+    makeRectangle(x - 50, y - 50, 100, 100);
+    run("Duplicate...", "title=local_area");
+
+// Convert to binary
+    run("Auto Threshold", "method=Default white stack");
+	run("BinaryFilterReconstruct ", "erosions=1 white"); 
+
+// Set measurements
+    run("Set Measurements...", "area redirect=None decimal=4");
+
+// Select cell near centre of ROI
+    doWand(50, 50);
+
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+// Measure and return area
+    run("Measure");
+    cell_area = getResult("Area", 0);
+
+// Close local area window	
+	close();
+	run("Select None");
+    
+	return cell_area;
+}
+
+function get_feret(x, y) {
+// Duplicate local area
+    makeRectangle(x - 50, y - 50, 100, 100);
+    run("Duplicate...", "title=local_area");
+
+// Convert to binary
+    run("Auto Threshold", "method=Default white stack");
+	run("BinaryFilterReconstruct ", "erosions=1 white"); 
+
+// Set measurements
+    run("Set Measurements...", "feret's redirect=None decimal=4");
+
+// Select cell near centre of ROI
+    doWand(50, 50);
+
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+// Measure and return area
+    run("Measure");
+    cell_feret = getResult("Feret", 0);
+
+// Close local area window
+    close();
+    run("Select None"); 
+
+    return cell_feret;
+}
+
+function get_circ(x, y) {
+// Duplicate local area
+    makeRectangle(x - 50, y - 50, 100, 100);
+    run("Duplicate...", "title=local_area");
+
+// Convert to binary
+    run("Auto Threshold", "method=Default white stack");
+	run("BinaryFilterReconstruct ", "erosions=1 white"); 
+
+// Set measurements
+    run("Set Measurements...", "shape redirect=None decimal=4");
+
+// Select cell near centre of ROI
+    doWand(50, 50);
+
+// Clear old Results if open
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Close");
+    }
+
+// Measure and return area
+    run("Measure");
+    cell_circ = getResult("Circ.", 0);
+
+// Close local area window
+    close();
+
+    return cell_circ;
+}
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
