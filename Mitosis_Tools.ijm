@@ -7,7 +7,7 @@
 
 //Tracking:
 
-//	Initialize Action Tool - Initializes the tracking. Specifies the future follicle condensate.
+//	Initialize Action Tool - Initializes the tracking. Specifies the position of the traget ROI.
 //	Manual Track Tool - Allows manual tracking of individual cells
 //	Adding a track changes the source number 1, 2, 3, 4 etc use this to start tracking a mother
 //	Adding a mitosis splits the track into daughters a and b (1a, 1b,does not yet support multiple mitoses)
@@ -111,12 +111,12 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 
 if (track_roi == true) {
 
-//Promt user to define the hair follicle condensate in the finale frame
+//Promt user to define the hair follicle targetROI in the finale frame
 		run("Colors...", "foreground=white background=black selection=cyan");///////////////////////////////////////////////////////////////////////////////////NEED THIS?????????????????????????????????
 		setSlice(slices);
 		run("Select None");
 		setTool("oval");
-		waitForUser("Select Condensate", "Please outline the condensate and press OK");
+		waitForUser("Select ROI", "Please outline the target ROI and press OK");
 
 //Only if ROI tracking is ticked//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -144,7 +144,7 @@ if (track_roi == true) {
 		saveAs("Tiff", dir+Image+"_ROI_Last.tif");
 		run("Close");
 
-//get the skeleton of the condensate
+//get the skeleton of the target ROI
 		selectWindow(Image);
 		run("Restore Selection");
 
@@ -360,7 +360,7 @@ macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D
 
 	setBatchMode(false);
 	
-//is the xy position within the condensate at this time point?
+//is the xy position within the tracked ROI at this time point?
     inside = "No";
 	
 	if (track_roi == true) {
