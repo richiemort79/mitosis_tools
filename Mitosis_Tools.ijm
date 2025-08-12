@@ -40,6 +40,7 @@ var time_step = 10;//this is the image acquisition rate in minutes
 var cal = 0.619;//This is the resolution of the image in micron/px
 
 //Global variables for ROI tracking
+var track_roi = false;
 var shortest = 100000;
 var	xpoints = newArray();//the extent of the ROI
 var ypoints = newArray();//the extent of the ROI
@@ -100,93 +101,105 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 	Dialog.addNumber("Scale (um/px):", 0.619);
 	Dialog.addCheckbox("Find random cells?", false);
 	Dialog.addNumber("Number of random cells:", 5);
+	Dialog.addCheckbox("Track ROI?", false);
 	Dialog.show();
 	time_step = Dialog.getNumber();
 	cal = Dialog.getNumber();
 	rcells = Dialog.getChoice();
 	sample = Dialog.getNumber();
+	track_roi = Dialog.getChoice();
+
+if (track_roi == true) {
 
 //Promt user to define the hair follicle condensate in the finale frame
-	run("Colors...", "foreground=white background=black selection=cyan");///////////////////////////////////////////////////////////////////////////////////NEED THIS?????????????????????????????????
-	setSlice(slices);
-	run("Select None");
-	setTool("oval");
-	waitForUser("Select Condensate", "Please outline the condensate and press OK");
+		run("Colors...", "foreground=white background=black selection=cyan");///////////////////////////////////////////////////////////////////////////////////NEED THIS?????????????????????????????????
+		setSlice(slices);
+		run("Select None");
+		setTool("oval");
+		waitForUser("Select Condensate", "Please outline the condensate and press OK");
+
+//Only if ROI tracking is ticked//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 //save snapshots frame 1 and last
-	run("Select None");
-	setSlice(1);
-	run("Duplicate...", " ");
-	run("Restore Selection");
-	run("RGB Color");
-	run("Colors...", "foreground=red background=red selection=red");
-	run("Draw");
-	run("Select None");
-	saveAs("Tiff", dir+Image+"_ROI_First.tif");
-	run("Close");
-	run("Select None");
-	setSlice(slices);
-	run("Duplicate...", " ");
-	run("Restore Selection");
-	run("RGB Color");
-	run("Colors...", "foreground=red background=red selection=red");
-	run("Draw");
-	run("Select None");
-	saveAs("Tiff", dir+Image+"_ROI_Last.tif");
-	run("Close");
+		run("Select None");
+		setSlice(1);
+		run("Duplicate...", " ");
+		run("Restore Selection");
+		run("RGB Color");
+		run("Colors...", "foreground=red background=red selection=red");
+		run("Draw");
+		run("Select None");
+		saveAs("Tiff", dir+Image+"_ROI_First.tif");
+		run("Close");
+		run("Select None");
+		setSlice(slices);
+		run("Duplicate...", " ");
+		run("Restore Selection");
+		run("RGB Color");
+		run("Colors...", "foreground=red background=red selection=red");
+		run("Draw");
+		run("Select None");
+		saveAs("Tiff", dir+Image+"_ROI_Last.tif");
+		run("Close");
 
 //get the skeleton of the condensate
-	selectWindow(Image);
-	run("Restore Selection");
+		selectWindow(Image);
+		run("Restore Selection");
 
-	if (isOpen("Results")){
-		selectWindow("Results");
-		run("Close");
-	}
+		if (isOpen("Results")){
+			selectWindow("Results");
+			run("Close");
+		}
 
 //get all the x and y positions of the pixels in the selection 
-	getSelectionBounds(x0, y0, width, height); 
+		getSelectionBounds(x0, y0, width, height); 
 
-	for (y=y0; y<y0+height; y++) {
-  		for (x=x0; x<x0+width; x++) { 
-    		if (selectionContains(x, y)){ 
-     			x_values = Array.concat(x_values, x);
-     			y_values = Array.concat(y_values, y);
-     		}
-  		} 
-	}	
+		for (y=y0; y<y0+height; y++) {
+  			for (x=x0; x<x0+width; x++) { 
+    			if (selectionContains(x, y)){ 
+   		  			x_values = Array.concat(x_values, x);
+   		  			y_values = Array.concat(y_values, y);
+   		  		}
+  			} 
+		}	
 
-	get_skel_xy(Image);
+		get_skel_xy(Image);
 
 //add to the saved images
-	open(dir+Image+"_ROI_First.tif");
-	run("Restore Selection");
-	run("Colors...", "foreground=yellow background=black selection=red");
-	run("Draw");
-	run("Select None");
-	saveAs("Tiff", dir+Image+"_ROI_First.tif");
-	run("Close");
+		open(dir+Image+"_ROI_First.tif");
+		run("Restore Selection");
+		run("Colors...", "foreground=yellow background=black selection=red");
+		run("Draw");
+		run("Select None");
+		saveAs("Tiff", dir+Image+"_ROI_First.tif");
+		run("Close");
 
-	open(dir+Image+"_ROI_Last.tif");
-	run("Restore Selection");
-	run("Colors...", "foreground=yellow background=black selection=red");
-	run("Draw");
-	run("Select None");
-	saveAs("Tiff", dir+Image+"_ROI_Last.tif");
-	run("Close");
+		open(dir+Image+"_ROI_Last.tif");
+		run("Restore Selection");
+		run("Colors...", "foreground=yellow background=black selection=red");
+		run("Draw");
+		run("Select None");
+		saveAs("Tiff", dir+Image+"_ROI_Last.tif");
+		run("Close");
 
 //save log of coordinates
-	print("X Values");
-	Array.print(x_values);
-	print("Y Values");
-	Array.print(y_values);
-	selectWindow("Log");
-	saveAs("Text", dir+Image+"Selection_Coordinates.txt");
-
-	if (isOpen("Log")){
+		print("X Values");
+		Array.print(x_values);
+		print("Y Values");
+		Array.print(y_values);
 		selectWindow("Log");
-		run("Close");
-	}
+		saveAs("Text", dir+Image+"Selection_Coordinates.txt");
+
+		if (isOpen("Log")){
+			selectWindow("Log");
+			run("Close");
+		}
+
+}
+
+//Only if ROI tracking is ticked//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	if (rcells == true) {
 	//add all cells to the manager in order to choose random cells
@@ -283,13 +296,14 @@ macro "Initialize Action Tool - CeefD25D4cD52Dd6CdddD18CfffD00D01D02D03D0cD0dD0e
 macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9aD9bD9cD9dD9eD9fDa3Da4Da7Da8Da9DaaDabDacDadDaeDafDb0Db1Db2Db3Db4Db8Db9DbaDbbDbcDbdDbeDbfDc0Dc1Dc2Dc3Dc4Dc9DcaDcbDccDcdDceDcfDd0Dd1Dd2Dd3Dd4Dd9DdaDdbDdcDddDdeDdfDe0De1De2De3De4De5DeaDebDecDedDeeDefDf0Df1Df2Df3Df4Df5DfbDfcDfdDfeDffC48dD4dD6cDc8Dd7Dd8De6De7Df6C37dD7fDfaC69eDa5C777D45C58dD6dDc6Dd5C999D27D36D37D38D54D63D64D72D73D74D83C8beD5eD75C48dD6bDb7Dc7Dd6C48dD4eDf7C8aeD49D4aD58D59C888D28D46D55D82C59eD96Db6C9beD57C47dD4fD7eDe8De9Df8Df9C7aeD5fD6fC59dDb5Dc5C8beD5aD66C69dD47D65C69eD76D86Da6C9beD5bD5cD5dD85C7aeD48D4bC59eD4cC59dD67C8beD95C6aeD6e" 
 {
 
-run("Restore Selection");
+//run("Restore Selection");
 
 //check there is a selection, if not ask to press the new track button
-    type = selectionType();
-    if (type == -1) {exit("There is no selection have you initialised the image?");}
+   // type = selectionType();
+   // if (type == -1) {exit("There is no selection have you initialised the image?");}
 
 //some variables
+	dist = 0;
 	track = toString(gtrack)+toString(daughter);
     slice = getSliceNumber(); 
     width = getWidth();
@@ -325,11 +339,14 @@ run("Restore Selection");
 	setBatchMode(true);
 
 //get nearest distance to the skeleton
-	posx = x;
-	posy = y;
-	get_s_dist(x, y, xpoints, ypoints, cal);
-    dist = shortest;
-    
+	
+	if (track_roi == true) {
+		posx = x;
+		posy = y;
+		get_s_dist(x, y, xpoints, ypoints, cal);
+    	dist = shortest;
+	}
+	
 //get morphology
 	cell_area = get_area(x, y);
 	cell_feret = get_feret(x, y);
@@ -345,16 +362,25 @@ run("Restore Selection");
 	
 //is the xy position within the condensate at this time point?
     inside = "No";
+	
+	if (track_roi == true) {
+	
+  	  for (i = 0; i < x_values.length; i++) {
+    	   if ((x == x_values[i]) && (y == y_values[i])) {inside = "Yes";} else {}
+    	}
 
-    for (i = 0; i < x_values.length; i++) {
-       if ((x == x_values[i]) && (y == y_values[i])) {inside = "Yes";} else {}
-    }
-
+	}
+    
+//Print to the results table    
     print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_seed+"\t"+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ);
 	last_line = ""+(slice)+"\t"+"1"+"\t"+"1"+"\t"+(x)+"\t"+(y)+"\t"+(com_roi_x)+"\t"+(com_roi_y)+"\t"+dist+"\t"+inside+"\t"+cell_area+"\t"+cell_feret+"\t"+cell_circ;
+	
+	
 //advance to next slice
+	selectWindow(Image);
     run("Next Slice [>]");
-    selectWindow(Image);
+    makeOval(x-12.5, y-12.5, 25, 25);
+    
 }
 
 macro "Add Track Action Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D13D14D15D16D17D19D1bD1cD1dD1eD1fD20D21D22D23D24D25D26D2bD2cD2dD2eD2fD30D31D32D33D34D39D3aD3bD3cD3dD3eD3fD40D41D42D43D50D51D52D53D60D61D62D68D69D6aD70D71D77D78D79D7aD7bD7cD7dD84D87D88D89D8aD8bD8cD8dD8eD8fD91D93D94D97D98D99D9fDa3Da4Da7Da8Db0Db1Db2Db3Db4Db8DbcDc0Dc1Dc2Dc3Dc4DcbDccDcdDd0Dd1Dd2Dd3Dd4DdcDe0De1De2De3De4De5Df0Df1Df2Df3Df4Df5DffC37dD7fC777D45C69dD47D65C777D08D09D0aD18D1aD29D2aD35D44D56D80D81D90D92Da0Da1Da2C48dD6bDb7Dc7Dd6Cbd9DabDbaDbbDceDecC8beD5eD75C582DaeDeaDeeC48dD4dD6cDc8Dd7Dd8De6De7Df6C999D27D36D37D38D54D63D64D72D73D74D83C7aeD48D4bC8b6DadDbeDdbDdeDebDedC59dDb5Dc5C9beD57C361D9dC48dD4eDf7C888D28D46D55D82C69eDa5C58dD6dDc6Dd5Cbd9DacC684Dc9C8aeD49D4aD58D59C8b6DdaC59dD67C9beD5bD5cD5dD85C47dD4fD7eDe8Df8Df9C69eD76D86Da6C8beD5aD66C473De9C7aeD5fD6fC8beD95C473D9cC6aeD6eCdebDcaC8a6DaaC59eD96Db6C59eD4cC695Da9Db9C584D9bDd9C8b6DbdDddC685D9a"
