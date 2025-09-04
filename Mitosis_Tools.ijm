@@ -485,8 +485,8 @@ if (testID == dataID) {
 
 //get dimensions
     Stack.getDimensions(width, height, channels, slices, frames);		
-    Stack.setDisplayMode("composite");
-    Stack.setActiveChannels(11111);
+    //Stack.setDisplayMode("composite");
+    //Stack.setActiveChannels(11111);
 
 // Requires ImageJ 1.41g or later
 	requires("1.41g");
@@ -500,7 +500,7 @@ if (testID == dataID) {
 // Create the table only if it’s not already open
 	if (!isOpen(title1)) {
     	run("Table...", "name=" + title2 + " width=1000 height=300");
-    	print(f, "\\Headings:\tImage_ID\tTrack\tMother?\tFrame\tX\tY\tCh1_Mean\tCh2_Mean\tCh3_Mean\tCh4_Mean\tCh5_Mean\tCilia_COMX\tCilia_COMY\tDistance_to_Cilia_(um)\tLength\tFeret\tStraightness\tKurt\tSkew\tAngle");
+    	print(f, "\\Headings:\tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
 	}  
 
 	setBatchMode(true);
@@ -522,12 +522,12 @@ if (testID == dataID) {
 	selectWindow("Results");
 	saveAs("Results", dir+"Results.csv");
 
-//get the mean intensities into arrays
-	c_one_means = newArray();
-	c_two_means = newArray();
-	c_three_means = newArray();
-	c_four_means = newArray();
-	c_five_means = newArray();
+//set up arryas to gather new data
+	new_areas = newArray();
+	new_feret = newArray();
+	new_circs = newArray();
+	new_com_x = newArray();
+	new_com_y = newArray();
 	
 //loop through x and y and remeasure the channels
 	for (i=0; i<old_x_values.length; i++) {
@@ -542,6 +542,16 @@ if (testID == dataID) {
 		c_three_means = Array.concat(c_three_means, mean_intensities[2]);
 		c_four_means = Array.concat(c_four_means, mean_intensities[3]);
 		c_five_means = Array.concat(c_five_means, mean_intensities[4]);
+	
+//get morphology
+		new_areas = Array,concat(new_areas, (get_area(x, y));
+		new_feret = Array.concat(new_ferets, (get_feret(x, y));
+		new_circs = Array.concat(new_circs, (get_circ(x,y));
+	
+//get centre of mass 
+		new_com_x = Array.concat(new_com_x, (get_com_x(x,y));
+		new_com_y = Array.concat(new_com_y, (get_com_y(x,y));
+	
 	}
 	setBatchMode(false);
 
@@ -550,34 +560,23 @@ if (testID == dataID) {
 	
 //loop through the results table and make a new table from above	
 	for (i=0; i<nResults; i++) {
-//print results to the tracking table
-		//print(f,(number++)+"\t"+(getResult("Image_ID", i))+"\t"+(getResult("Track",i))+"\t"+(getResult("Mother?",i))+"\t"+(getResult("Frame",i))+"\t"+(old_x_values[i])+"\t"+(old_y_values[i])+"\t"+(c_one_means[i])+"\t"+(c_two_means[i])+"\t"+(c_three_means[i])+"\t"+(c_four_means[i])+"\t"+(c_five_means[i])+"\t"+(getResult("Cilia_COMX",i))+"\t"+(getResult("Cilia_COMY",i))+"\t"+(getResult("Distance_to_Cilia_(um))",i)+"\t"+(getResult("Length",i))+"\t"+(getResult("Feret",i))+"\t"+(getResult("Straightness",i))+"\t"+(getResult("Kurt",i))+"\t"+(getResult("Skew",i))+"\t"+(getResult("Angle",i)));
-	//	print(f,(number++)+"\t"+Image+"\t"+track+"\t"+is_mother+"\t"+(frame)+"\t"+x+"\t"+y+"\t"+mean_intensities[0]+"\t"+mean_intensities[1]+"\t"+mean_intensities[2]+"\t"+mean_intensities[3]+"\t"+mean_intensities[4]+"\t"+com_roi_x+"\t"+com_roi_y+"\t"+dist+"\t"+c_length+"\t"+c_f_length+"\t"+c_straightness+"\t"+c_kurtosis+"\t"+c_skewness+"\t"+c_angle);
 	
-	print(f,
-    number++ + "\t" + 
-    getResultString("Image_ID", i) + "\t" + 
-    getResultString("Track", i) + "\t" + 
-    getResult("Mother?", i) + "\t" + 
-    getResult("Frame", i) + "\t" + 
-    old_x_values[i] + "\t" + 
-    old_y_values[i] + "\t" + 
-    c_one_means[i] + "\t" + 
-    c_two_means[i] + "\t" + 
-    c_three_means[i] + "\t" + 
-    c_four_means[i] + "\t" + 
-    c_five_means[i] + "\t" + 
-    getResult("Cilia_COMX", i) + "\t" + 
-    getResult("Cilia_COMY", i) + "\t" + 
-    getResult("Distance_to_Cilia_(um)", i) + "\t" + 
-    getResult("Length", i) + "\t" + 
-    getResult("Feret", i) + "\t" + 
-    getResult("Straightness", i) + "\t" + 
-    getResult("Kurt", i) + "\t" + 
-    getResult("Skew", i) + "\t" + 
-    getResult("Angle", i));
-	
-	
+		print(f,
+	    number++ + "\t" + 
+	    getResultString("Image_ID", i) + "\t" + 
+	    getResultString("Track", i) + "\t" + 
+	    getResult("Seed?", i) + "\t" + 
+	    getResult("Frame", i) + "\t" + 
+	    getResult("Ch", i) + "\t" +
+	    new_com_x[i] + "\t" + 
+	    new_com_y[i] + "\t" + 
+	    getResult("Follicle_COMX", i) + "\t" +
+	    getResult("Follicle_COMY", i) + "\t" +
+	    getResult("Distance_from_COM_(um)", i) + "\t" +
+	    getResult("Inside", i) + "\t" +
+	    new_areas[i] + "\t" + 
+	    new_feret[i] + "\t" + 
+	    new_circ[i] + "\t" + 	
 	}
 }
 
