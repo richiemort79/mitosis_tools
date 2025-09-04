@@ -533,19 +533,10 @@ if (testID == dataID) {
 	for (i=0; i<old_x_values.length; i++) {
 		x = old_x_values[i];	
 		y = old_y_values[i];
-		
-//measure fucci
-		setSlice(old_frames[i]);
-    	fucci_measure(Image, x, y, dia);
-    	c_one_means = Array.concat(c_one_means, mean_intensities[0]);
-		c_two_means = Array.concat(c_two_means, mean_intensities[1]);
-		c_three_means = Array.concat(c_three_means, mean_intensities[2]);
-		c_four_means = Array.concat(c_four_means, mean_intensities[3]);
-		c_five_means = Array.concat(c_five_means, mean_intensities[4]);
 	
 //get morphology
 		new_areas = Array,concat(new_areas, (get_area(x, y));
-		new_feret = Array.concat(new_ferets, (get_feret(x, y));
+		new_feret = Array.concat(new_feret, (get_feret(x, y));
 		new_circs = Array.concat(new_circs, (get_circ(x,y));
 	
 //get centre of mass 
