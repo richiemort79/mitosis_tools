@@ -508,6 +508,7 @@ if (testID == dataID) {
 	old_x_values = newArray();
 	old_y_values = newArray();
 	old_frames = newArray();
+	
 	for (i=0; i<nResults; i++) {
 		x = getResult("X", i);	
 		y = getResult("Y", i);
@@ -535,13 +536,13 @@ if (testID == dataID) {
 		y = old_y_values[i];
 	
 //get morphology
-		new_areas = Array,concat(new_areas, (get_area(x, y));
-		new_feret = Array.concat(new_feret, (get_feret(x, y));
-		new_circs = Array.concat(new_circs, (get_circ(x,y));
+		new_areas = Array.concat(new_areas, get_area(x, y));
+		new_feret = Array.concat(new_feret, get_feret(x, y));
+		new_circs = Array.concat(new_circs, get_circ(x,y));
 	
 //get centre of mass 
-		new_com_x = Array.concat(new_com_x, (get_com_x(x,y));
-		new_com_y = Array.concat(new_com_y, (get_com_y(x,y));
+		new_com_x = Array.concat(new_com_x, get_com_x(x,y));
+		new_com_y = Array.concat(new_com_y, get_com_y(x,y));
 	
 	}
 	setBatchMode(false);
@@ -567,7 +568,7 @@ if (testID == dataID) {
 	    getResult("Inside", i) + "\t" +
 	    new_areas[i] + "\t" + 
 	    new_feret[i] + "\t" + 
-	    new_circ[i] + "\t" + 	
+	    new_circs[i] + "\t" + 	
 	}
 }
 
