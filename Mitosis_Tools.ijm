@@ -559,6 +559,7 @@ if (testID == dataID) {
 	    getResultString("Track", i) + "\t" + 
 	    getResult("Seed?", i) + "\t" + 
 	    getResult("Frame", i) + "\t" + 
+	    getResult("Slice", i) + "\t" + 
 	    getResult("Ch", i) + "\t" +
 	    new_com_x[i] + "\t" + 
 	    new_com_y[i] + "\t" + 
