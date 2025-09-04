@@ -568,7 +568,7 @@ if (testID == dataID) {
 	    getResult("Inside", i) + "\t" +
 	    new_areas[i] + "\t" + 
 	    new_feret[i] + "\t" + 
-	    new_circs[i] + "\t" + 	
+	    new_circs[i]); 	
 	}
 }
 
