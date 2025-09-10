@@ -459,126 +459,119 @@ macro "Switch Daughter Action Tool - CcdcD98C696DbcCfffD00D01D02D07D08D0dD0eD0fD
 	waitForUser("The track has switched to "+gtrack+daughter);
 }
 
-macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1cD1eDa1Db1Dc1Dd1De1C666D07D08D09D0aD0bD0cD0dD2fD3fD4fD5fD6fD7fD8fD9fDa0DafDb0DbfDc0DcfDd0DefDf2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeCdd8D37Caa5D7cCfe9D68C8c6D5bCbceDa7Ccc4D73CfffD11D15D16D17D18D19D1aD21D61D81D91C665D02D03D04D05D06D0eD1fD20D30D40D50D60D70D80D90C79cDd3Cf55D54Cff8D64C8b6D7bC9bdDd7Cac8DbdCfffD12D13D14D1bD31D41D51D71CcdaDb8Cd85D8cCffaD26D48C8c7DdbCdedD4eD5eD6eD7eD8eD9eDceDe7De8DeaDebDecDeeCcd7Dd8C565D01D10De0Df1Cad8D4cD6aCb85D79Cee8D23D36D47D58C8bdDa3C9c7D5cCefeD1dCcd9D2bCb96DdaCeeaD29CcddDa8Cdd5D75D98C8adDb5Cf66D66Cee9D25D38D49C9beDa5Dc4Cac8D5dDddCdedD2eD3eDe3De4De5De6DedCd96Dd9CffbD2aC9c7D3bCdd7Dc9Cad8DcdCe64D55Cee8D52C8adD92Dd4C9c7D7aCcd9Da9Caa7D9dCff9D22D24D46CaceDa4Dc6Ccc5D72C7adDc3Cf65D43Cff8D62C9beD94C9c8D4bDdcCdecDbeCe85DcaCffaD28Cdd7D33D57D86Cbd9D4dCc85D7dC9beDb4Cbc7D59Ccd9D84Cca7D6dCdedDe2Cdd6D74CabbD83Ce76DadCabeDd6Cbc8D8dCea5DbaCdedDdeCed7D76Cac8D3dCe54D9cCfd8D44C8adDb2Cbb7D97Cde8DaaCaa6D9aCff9D27Ccc5Db9C79dDb3Ce55D78CabdDb7Dc7Cd95D53Cb85DbbC9bdDc5C9c7D3cD6bDbcCbdaD2dCba7D8bC9bdD95Cf76D42Ce96D65Ced7D56Cad8D6cCd74DabCee8D34D45C8aeDc2C9c7D5aCdd8D39C9b7DcbCcc5D85C8adD93Dd5Ce75D77CdecDe9Ce96D67Cad9D2cCd76D89C9beDa2Cdd9Dc8Cca7DacCbdfDa6Cdd6D87CbccD96Cf77D8aCaceDb6Ceb6D32CeedDaeCdd7D35C9c7D69Cbe9D4aCde9D3aCaceD82Cee7D63"
-{
-//re run an analysis using the x,y coordinates in the results table e.g. either with tweaked parameters or on a processed version of the original data
-//requires an open results table and the corresponding image
-//first run intialise and tweak parameters or load a processed dataset
+macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1cD1eDa1Db1Dc1Dd1De1C666D07D08D09D0aD0bD0cD0dD2fD3fD4fD5fD6fD7fD8fD9fDa0DafDb0DbfDc0DcfDd0DefDf2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeCdd8D37Caa5D7cCfe9D68C8c6D5bCbceDa7Ccc4D73CfffD11D15D16D17D18D19D1aD21D61D81D91C665D02D03D04D05D06D0eD1fD20D30D40D50D60D70D80D90C79cDd3Cf55D54Cff8D64C8b6D7bC9bdDd7Cac8DbdCfffD12D13D14D1bD31D41D51D71CcdaDb8Cd85D8cCffaD26D48C8c7DdbCdedD4eD5eD6eD7eD8eD9eDceDe7De8DeaDebDecDeeCcd7Dd8C565D01D10De0Df1Cad8D4cD6aCb85D79Cee8D23D36D47D58C8bdDa3C9c7D5cCefeD1dCcd9D2bCb96DdaCeeaD29CcddDa8Cdd5D75D98C8adDb5Cf66D66Cee9D25D38D49C9beDa5Dc4Cac8D5dDddCdedD2eD3eDe3De4De5De6DedCd96Dd9CffbD2aC9c7D3bCdd7Dc9Cad8DcdCe64D55Cee8D52C8adD92Dd4C9c7D7aCcd9Da9Caa7D9dCff9D22D24D46CaceDa4Dc6Ccc5D72C7adDc3Cf65D43Cff8D62C9beD94C9c8D4bDdcCdecDbeCe85DcaCffaD28Cdd7D33D57D86Cbd9D4dCc85D7dC9beDb4Cbc7D59Ccd9D84Cca7D6dCdedDe2Cdd6D74CabbD83Ce76DadCabeDd6Cbc8D8dCea5DbaCdedDdeCed7D76Cac8D3dCe54D9cCfd8D44C8adDb2Cbb7D97Cde8DaaCaa6D9aCff9D27Ccc5Db9C79dDb3Ce55D78CabdDb7Dc7Cd95D53Cb85DbbC9bdDc5C9c7D3cD6bDbcCbdaD2dCba7D8bC9bdD95Cf76D42Ce96D65Ced7D56Cad8D6cCd74DabCee8D34D45C8aeDc2C9c7D5aCdd8D39C9b7DcbCcc5D85C8adD93Dd5Ce75D77CdecDe9Ce96D67Cad9D2cCd76D89C9beDa2Cdd9Dc8Cca7DacCbdfDa6Cdd6D87CbccD96Cf77D8aCaceDb6Ceb6D32CeedDaeCdd7D35C9c7D69Cbe9D4aCde9D3aCaceD82Cee7D63" {
+
+
+// re-run an analysis using the x,y coordinates in the results table
+// requires an open results table and the corresponding image
 
 // Check for results table
-	if (!isOpen("Results")) {
-    	exit("There is no Results table open");
-	}
-
-// Check that image title matches the "Image_ID" entry in Results table
-	testID = getTitle();
-	dataID = getResultString("Image_ID", 1);
-
-// Debug print
-// print(testID + " " + dataID);
-
-if (testID == dataID) {
-    	//print("PASS");
-	} else {
-    	choice = getBoolean("The Image name does not match the ImageID in the results table. Continue?");
-    
-    	if (!choice) {
-        	exit("Please load matching datasets");
-    	}
+if (!isOpen("Results")) {
+    exit("There is no Results table open");
 }
 
-//get dimensions
-    Stack.getDimensions(width, height, channels, slices, frames);		
-    //Stack.setDisplayMode("composite");
-    //Stack.setActiveChannels(11111);
+// Check that image title matches the "Image_ID" entry in Results table
+testID = getTitle();
+dataID = getResultString("Image_ID", 1);
+
+if (testID != dataID) {
+    choice = getBoolean("The Image name does not match the ImageID in the results table. Continue?");
+    if (!choice) exit("Please load matching datasets");
+}
+
+// Get dimensions
+Stack.getDimensions(width, height, channels, slices, frames);
 
 // Requires ImageJ 1.41g or later
-	requires("1.41g");
+requires("1.41g");
 
 // Get image title
-	imgTitle = getTitle();
-	title1 = imgTitle + "_Tracking Table";
-	title2 = "[" + title1 + "]";
-	f = title2;
+imgTitle = getTitle();
+title1 = imgTitle + "_Tracking Table";
+title2 = "[" + title1 + "]";
+f = title2;
 
-// Create the table only if it’s not already open
-	if (!isOpen(title1)) {
-    	run("Table...", "name=" + title2 + " width=1000 height=300");
-    	print(f, "\\Headings:\tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
-	}  
+// Create the output table only if it’s not already open
+if (!isOpen(title1)) {
+    run("Table...", "name=" + title2 + " width=1000 height=300");
+    print(f, "\\Headings:\tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
+}
 
-	setBatchMode(true);
-//get the x and y values into two arrays
-	old_x_values = newArray();
-	old_y_values = newArray();
-	old_frames = newArray();
-	
-	for (i=0; i<nResults; i++) {
-		x = getResult("X", i);	
-		y = getResult("Y", i);
-		fr = getResult("Frame", i);
-		old_x_values = Array.concat(old_x_values, x);
-		old_y_values = Array.concat(old_y_values, y);
-		old_frames = Array.concat(old_frames, fr);
-	}
+// Store original x,y,frame values in arrays
+old_x_values = newArray();
+old_y_values = newArray();
+old_frames   = newArray();
 
-//save and close the results table
-	dir = File.directory();
-	selectWindow("Results");
-	saveAs("Results", dir+"Results.csv");
+for (i=0; i<nResults; i++) {
+    x = getResult("X", i);	
+    y = getResult("Y", i);
+    fr = getResult("Frame", i);
+    old_x_values = Array.concat(old_x_values, x);
+    old_y_values = Array.concat(old_y_values, y);
+    old_frames   = Array.concat(old_frames, fr);
+}
 
-//set up arryas to gather new data
-	new_areas = newArray();
-	new_feret = newArray();
-	new_circs = newArray();
-	new_com_x = newArray();
-	new_com_y = newArray();
-	
-//loop through x and y and remeasure the channels
-	for (i=0; i<old_x_values.length; i++) {
-		x = old_x_values[i];	
-		y = old_y_values[i];
-	
-//get morphology values into array		
-		morphology_values = newArray();
-		morphology_values = get_cell_properties(59, 126);
+// Save and close the original Results table
+dir = File.directory();
+selectWindow("Results");
+saveAs("Results", dir+"Results.csv");
+close("Results");
 
-//get morphology
-		new_areas = Array.concat(new_areas, morphology_values[0]);
-		new_feret = Array.concat(new_feret, morphology_values[1]);
-		new_circs = Array.concat(new_circs, morphology_values[2]);
-	
-//get centre of mass 
-		new_com_x = Array.concat(new_com_x, morphology_values[3]);
-		new_com_y = Array.concat(new_com_y, morphology_values[4]);
-	
-	}
-	setBatchMode(false);
+// Arrays to store new measurements
+new_areas = newArray();
+new_feret = newArray();
+new_circs = newArray();
+new_com_x = newArray();
+new_com_y = newArray();
 
-//reopen the Results table
-	open(dir+"Results.csv");
-	
-//loop through the results table and make a new table from above	
-	for (i=0; i<nResults; i++) {
-	
-		print(f,
-	    number++ + "\t" + 
-	    getResultString("Image_ID", i) + "\t" + 
-	    getResultString("Track", i) + "\t" + 
-	    getResult("Seed?", i) + "\t" + 
-	    getResult("Frame", i) + "\t" + 
-	    getResult("Slice", i) + "\t" + 
-	    getResult("Ch", i) + "\t" +
-	    new_com_x[i] + "\t" + 
-	    new_com_y[i] + "\t" + 
-	    getResult("Follicle_COMX", i) + "\t" +
-	    getResult("Follicle_COMY", i) + "\t" +
-	    getResult("Distance_from_COM_(um)", i) + "\t" +
-	    getResult("Inside", i) + "\t" +
-	    new_areas[i] + "\t" + 
-	    new_feret[i] + "\t" + 
-	    new_circs[i]); 	
-	}
+// --- Perform measurements in batch mode ---
+setBatchMode(true);
+
+for (i=0; i<old_x_values.length; i++) {
+    x = old_x_values[i];	
+    y = old_y_values[i];
+
+    // get morphology values into array		
+    morphology_values = get_cell_properties(x, y);
+
+    // get morphology
+    new_areas = Array.concat(new_areas, morphology_values[0]);
+    new_feret = Array.concat(new_feret, morphology_values[1]);
+    new_circs = Array.concat(new_circs, morphology_values[2]);
+
+    // get centre of mass 
+    new_com_x = Array.concat(new_com_x, morphology_values[3]);
+    new_com_y = Array.concat(new_com_y, morphology_values[4]);
+}
+
+setBatchMode(false);
+
+// --- Reopen saved Results (read-only) ---
+open(dir+"Results.csv");
+
+// --- Write new combined table once ---
+number = 0;
+for (i=0; i<nResults; i++) {
+    print(f,
+        number++ + "\t" +                             // <-- added back
+        getResultString("Image_ID", i) + "\t" + 
+        getResultString("Track", i) + "\t" + 
+        getResult("Seed?", i) + "\t" + 
+        getResult("Frame", i) + "\t" + 
+        getResult("Slice", i) + "\t" + 
+        getResult("Ch", i) + "\t" +
+        old_x_values[i] + "\t" +
+        old_y_values[i] + "\t" +
+        getResult("Follicle_COMX", i) + "\t" +
+        getResult("Follicle_COMY", i) + "\t" +
+        getResult("Distance_from_COM_(um)", i) + "\t" +
+        getResult("Inside", i) + "\t" +
+        new_areas[i] + "\t" + 
+        new_feret[i] + "\t" + 
+        new_circs[i]
+    ); 	
+}
+
 }
 
 macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1eD1fD20D24D27D2aD2eD2fD30D34D37D3aD3eD3fD40D44D45D46D47D48D49D4aD4bD4cD4eD4fD50D54D57D5aD5eD5fD60D64D67D6aD6eD6fD70D74D75D76D77D78D79D7aD7bD7cD7eD7fD80D84D87D8aD8eD8fD90D94D97D9aD9eD9fDa0Da4Da5Da6Da7Da8Da9DaaDabDacDaeDafDb0Db4Db7DbaDbeDbfDc0Dc4Dc7DcaDceDcfDd0Dd4Dd5Dd6Dd7Dd8Dd9DdaDdbDdcDdeDdfDe0DeeDefDf0Df1Df2Df3Df4Df5Df6Df7Df8Df9DfaDfbDfcDfdDfeDffC9c9D5bD6bD85D86D95D96C7adD07D61C8adD02C68bD3dCf66D2bD3bC6beD28D29D38D39D55D56D65D66CbcdD01De1C58bDe6CdddD25D26D35D36D58D59D68D69D8bD9bDb5Db6DbbDc5Dc6DcbC7adD03D04D05D06D13D21D23D31D33D41D43D51D53D63D73D83D93Da3Db3Dc3Dd3C9beD12D22D32D42D52D62D72D82D92Da2Db2Dc2Dd2C79cD91Da1Cfd6Db8Db9Dc8Dc9CeeeD8cD9cDbcDccC57aD9dC89cDd1C9bdD11C69cD0aD0bD0cDb1Dc1Cfa7D88D89D98D99CdedD5cD6cC68bD4dDe4De5C79dD08D09D71D81CfccD2cD3cC68cD1dC58bD5dC57bD6dD7dD8dDe7De8De9C8acD0dDedC68cD2dDe3C79cDe2"
@@ -1267,19 +1260,19 @@ function get_cell_properties(x, y) {
     // Set all needed measurements
     run("Set Measurements...", "area feret's shape center redirect=None decimal=4");
 
-    // Select cell near centre of ROI
+    // Select ROI
     doWand(x, y);
 
-    // Clear old Results if open
+    // Clear Results silently (avoid accumulation)
     if (isOpen("Results")) {
         selectWindow("Results");
-        run("Close");
+        run("Clear Results");
     }
 
     // Measure
     run("Measure");
 
-    // Collect values
+    // Grab values
     area  = getResult("Area", 0);
     feret = getResult("Feret", 0);
     circ  = getResult("Circ.", 0);
@@ -1288,9 +1281,8 @@ function get_cell_properties(x, y) {
 
     // Clean up
     close();
-    run("Select None"); 
+    run("Select None");
 
-    // Return as an array or JSON-like string
     return newArray(area, feret, circ, com_x, com_y);
 }
 
