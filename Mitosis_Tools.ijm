@@ -560,8 +560,8 @@ for (i=0; i<nResults; i++) {
         getResult("Frame", i) + "\t" + 
         getResult("Slice", i) + "\t" + 
         getResult("Ch", i) + "\t" +
-        old_x_values[i] + "\t" +
-        old_y_values[i] + "\t" +
+        new_com_x[i] + "\t" +
+        new_com_y[i] + "\t" +
         getResult("Follicle_COMX", i) + "\t" +
         getResult("Follicle_COMY", i) + "\t" +
         getResult("Distance_from_COM_(um)", i) + "\t" +
