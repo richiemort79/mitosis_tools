@@ -466,80 +466,80 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
 // requires an open results table and the corresponding image
 
 // Check for results table
-if (!isOpen("Results")) {
-    exit("There is no Results table open");
-}
+	if (!isOpen("Results")) {
+    		exit("There is no Results table open");
+	}
 
 // Check that image title matches the "Image_ID" entry in Results table
-testID = getTitle();
-dataID = getResultString("Image_ID", 1);
+	testID = getTitle();
+	dataID = getResultString("Image_ID", 1);
 
-if (testID != dataID) {
-    choice = getBoolean("The Image name does not match the ImageID in the results table. Continue?");
-    if (!choice) exit("Please load matching datasets");
-}
+	if (testID != dataID) {
+    		choice = getBoolean("The Image name does not match the ImageID in the results table. Continue?");
+    		if (!choice) exit("Please load matching datasets");
+	}
 
 // Get dimensions
-Stack.getDimensions(width, height, channels, slices, frames);
+	Stack.getDimensions(width, height, channels, slices, frames);
 
 // Requires ImageJ 1.41g or later
-requires("1.41g");
+	requires("1.41g");
 
 // Get image title
-imgTitle = getTitle();
-title1 = imgTitle + "_Tracking Table";
-title2 = "[" + title1 + "]";
-f = title2;
+	imgTitle = getTitle();
+	title1 = imgTitle + "_Tracking Table";
+	title2 = "[" + title1 + "]";
+	f = title2;
 
 // Create the output table only if it’s not already open
-if (!isOpen(title1)) {
-    run("Table...", "name=" + title2 + " width=1000 height=300");
-    print(f, "\\Headings:\tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
-}
+	if (!isOpen(title1)) {
+    		run("Table...", "name=" + title2 + " width=1000 height=300");
+    		print(f, "\\Headings:\tImage_ID\tTrack\tSeed\tFrame\tSlice\tCh\tX\tY\tOld_X\tOld_Y\tFollicle_COMX\tFollicle_COMY\tDistance_from_COM_(um)\tInside?\tArea\tFeret\tCirc.");
+	}
 
 // Store original x,y,frame values in arrays
-old_x_values = newArray();
-old_y_values = newArray();
-old_frames   = newArray();
+	old_x_values = newArray();
+	old_y_values = newArray();
+	old_frames   = newArray();
 
-for (i=0; i<nResults; i++) {
-    x = getResult("X", i);	
-    y = getResult("Y", i);
-    fr = getResult("Frame", i);
-    old_x_values = Array.concat(old_x_values, x);
-    old_y_values = Array.concat(old_y_values, y);
-    old_frames   = Array.concat(old_frames, fr);
-}
+	for (i=0; i<nResults; i++) {
+    		x = getResult("X", i);	
+    		y = getResult("Y", i);
+    		fr = getResult("Frame", i);
+    		old_x_values = Array.concat(old_x_values, x);
+    		old_y_values = Array.concat(old_y_values, y);
+    		old_frames   = Array.concat(old_frames, fr);
+	}
 
 // Save and close the original Results table
-dir = File.directory();
-selectWindow("Results");
-saveAs("Results", dir+"Results.csv");
-close("Results");
+	dir = File.directory();
+	selectWindow("Results");
+	saveAs("Results", dir+"Results.csv");
+	close("Results");
 
 // Arrays to store new measurements
-new_areas = newArray();
-new_feret = newArray();
-new_circs = newArray();
-new_com_x = newArray();
-new_com_y = newArray();
+	new_areas = newArray();
+	new_feret = newArray();
+	new_circs = newArray();
+	new_com_x = newArray();
+	new_com_y = newArray();
 
 // --- Perform measurements in batch mode ---
-setBatchMode(true);
+	setBatchMode(true);
 
-for (i=0; i<old_x_values.length; i++) {
-    x = old_x_values[i];	
-    y = old_y_values[i];
+	for (i=0; i<old_x_values.length; i++) {
+    		x = old_x_values[i];	
+    		y = old_y_values[i];
 
-    // get morphology values into array		
+// get morphology values into array		
     morphology_values = get_cell_properties(x, y);
 
-    // get morphology
+// get morphology
     new_areas = Array.concat(new_areas, morphology_values[0]);
     new_feret = Array.concat(new_feret, morphology_values[1]);
     new_circs = Array.concat(new_circs, morphology_values[2]);
 
-    // get centre of mass 
+// get centre of mass 
     new_com_x = Array.concat(new_com_x, morphology_values[3]);
     new_com_y = Array.concat(new_com_y, morphology_values[4]);
 }
@@ -547,30 +547,31 @@ for (i=0; i<old_x_values.length; i++) {
 setBatchMode(false);
 
 // --- Reopen saved Results (read-only) ---
-open(dir+"Results.csv");
+	open(dir+"Results.csv");
 
 // --- Write new combined table once ---
-number = 0;
-for (i=0; i<nResults; i++) {
-    print(f,
-        number++ + "\t" +                             // <-- added back
-        getResultString("Image_ID", i) + "\t" + 
-        getResultString("Track", i) + "\t" + 
-        getResult("Seed?", i) + "\t" + 
-        getResult("Frame", i) + "\t" + 
-        getResult("Slice", i) + "\t" + 
-        getResult("Ch", i) + "\t" +
-        new_com_x[i] + "\t" +
-        new_com_y[i] + "\t" +
-        getResult("Follicle_COMX", i) + "\t" +
-        getResult("Follicle_COMY", i) + "\t" +
-        getResult("Distance_from_COM_(um)", i) + "\t" +
-        getResult("Inside", i) + "\t" +
-        new_areas[i] + "\t" + 
-        new_feret[i] + "\t" + 
-        new_circs[i]
-    ); 	
-}
+	number = 0;
+	for (i=0; i<nResults; i++) {
+    		print(f,
+     		number++ + "\t" +                             // <-- added back
+        	getResultString("Image_ID", i) + "\t" + 
+        	getResultString("Track", i) + "\t" + 
+        	getResult("Seed?", i) + "\t" + 
+        	getResult("Frame", i) + "\t" + 
+        	getResult("Slice", i) + "\t" + 
+        	getResult("Ch", i) + "\t" +
+        	new_com_x[i] + "\t" +
+        	new_com_y[i] + "\t" +
+        	old_x_values[i] + "\t" +
+        	old_y_values[i] + "\t" +
+        	getResult("Follicle_COMX", i) + "\t" +
+        	getResult("Follicle_COMY", i) + "\t" +
+        	getResult("Distance_from_COM_(um)", i) + "\t" +
+        	getResult("Inside", i) + "\t" +
+        	new_areas[i] + "\t" + 
+        	new_feret[i] + "\t" + 
+        	new_circs[i]); 	
+	}
 
 }
 
