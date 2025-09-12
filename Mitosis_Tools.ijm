@@ -614,6 +614,9 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		align_data("Acc_Dist_(um)");
 		align_data("Euclidean_D_(um)");
 		align_data("Persistence");
+		align_data("Area");
+		align_data("Feret");
+		align_data("Circ.");
 		
 	}
 }
