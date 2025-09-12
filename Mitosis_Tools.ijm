@@ -531,17 +531,18 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
     		y = old_y_values[i];
 
 //Get morphology values into array		
-    morphology_values = get_cell_properties(x, y);
+    		setSlice(old_frames[i]);
+    		morphology_values = get_cell_properties(x, y);
 
 //Get morphology
-    new_areas = Array.concat(new_areas, morphology_values[0]);
-    new_feret = Array.concat(new_feret, morphology_values[1]);
-    new_circs = Array.concat(new_circs, morphology_values[2]);
+    		new_areas = Array.concat(new_areas, morphology_values[0]);
+    		new_feret = Array.concat(new_feret, morphology_values[1]);
+    		new_circs = Array.concat(new_circs, morphology_values[2]);
 
 //Get centre of mass 
-    new_com_x = Array.concat(new_com_x, morphology_values[3]);
-    new_com_y = Array.concat(new_com_y, morphology_values[4]);
-}
+    		new_com_x = Array.concat(new_com_x, morphology_values[3]);
+    		new_com_y = Array.concat(new_com_y, morphology_values[4]);
+	}
 
 setBatchMode(false);
 
