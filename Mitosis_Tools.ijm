@@ -619,6 +619,12 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 		align_data("Circ.");
 		
 	}
+	
+	else if (cmd=="Parse to MDF") {
+	
+		convert_to_mdf2();
+		
+	}
 }
 
 //////////////////////////////////////////////////////////////////////FUCNTIONS HERE//////////////////////////////////////////////////////////////////////
@@ -1289,4 +1295,93 @@ function get_cell_properties(x, y) {
     return newArray(area, feret, circ, com_x, com_y);
 }
 
+function convert_to_mdf2(){
+
+//get the track numbers in an array to use as the index
+	track_number = list_no_repeats ("Results", "Track");
+	mothers_and_daughters = newArray();
+	
+	for (i = 0; i < track_number.length; i++) {
+		track_string = track_number[i];
+		len = track_string.length;
+		key = substring(track_string,len-1);
+	
+		if (key == "a" || key== "b") {
+			mothers_and_daughters = Array.concat(mothers_and_daughters,0);
+			} else {
+			mothers_and_daughters = Array.concat(mothers_and_daughters,1);
+			}
+	}
+	
+//close the log
+	if (isOpen("Log")) {
+		selectWindow("Log");
+		run("Close");
+	}
+	
+	print("MTrackJ 1.2.0 Data File");
+	print("Assembly 1");
+
+//write the mothers to cluster 1
+
+	print("Cluster 1 (Seeds)");
+
+	for (i=0; i<track_number.length; i++){
+		if (mothers_and_daughters[i]==1) {
+			print("Track "+i+1);
+		}
+		count=0;
+		for (j=0; j<nResults; j++) {
+			
+			if ((getResultString("Track", j) == track_number[i])&&(getResult("Seed?", j)==1)){
+				count = count+1;
+
+				x = getResult("X", j);
+				y = getResult("Y", j);
+				z =	1;
+				t = getResult("Frame", j);
+				c = 1;
+				ch1 = getResult("Ch1_Mean", j);
+				ch2 = getResult("Ch2_Mean", j);
+				ch3 = getResult("Ch3_Mean", j);
+				ch4 = getResult("Ch4_Mean", j);
+				ch5 = getResult("Ch5_Mean", j);
+						
+				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+" "+ch1+" "+ch2+" "+ch3+" "+ch4);
+				}
+			}
+		}
+		
+//write the daughters to cluster 2
+
+	print("Cluster 2 (Progeny)");
+
+	for (i=0; i<track_number.length; i++){
+		if (mothers_and_daughters[i]==0) {
+			print("Track "+i+1);
+		}
+		count=0;
+		for (j=0; j<nResults; j++) {
+		
+			if ((getResultString("Track", j) == track_number[i])&&(getResult("Seed?", j)==0)){
+				count = count+1;
+
+				x = getResult("X", j);
+				y = getResult("Y", j);
+				z =	1;
+				t = getResult("Frame", j);
+				c = 1;
+				ch1 = getResult("Ch1_Mean", j);
+				ch2 = getResult("Ch2_Mean", j);
+				ch3 = getResult("Ch3_Mean", j);
+				ch4 = getResult("Ch4_Mean", j);
+				ch5 = getResult("Ch5_Mean", j);
+			
+				print("Point "+count+" "+x+" "+y+" "+z+" "+t+" "+c+" "+ch1+" "+ch2+" "+ch3+" "+ch4);
+				}
+			}
+		}
+		
+	print("End of MTrackJ Data File");
+}
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
