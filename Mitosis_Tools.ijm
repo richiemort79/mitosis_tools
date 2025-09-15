@@ -529,6 +529,11 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
 	for (i=0; i<old_x_values.length; i++) {
     		x = old_x_values[i];	
     		y = old_y_values[i];
+    		
+//Correct these values to avoid erors if centre of mask is black
+		corrected_xy = correct_xy(x,y;);
+		x = xorrected_xy[0];
+		y = xorrected_xy[1];
 
 //Get morphology values into array		
     		setSlice(old_frames[i]);
@@ -1386,5 +1391,23 @@ function convert_to_mdf2(){
 		
 	print("End of MTrackJ Data File");
 }
+
+function correct_xy(x,y) {
+	
+	//make roi
+	drawOval(x,y,20,20);
+	getRawStatistics(nPixels, mean, min, max);
+	run("Find Maxima...", "noise="+max+" output=[Point Selection]");
+    	
+    	// Get coordinates of maxima point selection
+    	getSelectionBounds(x, y, w, h);
+
+    	// Return corrected coordinates
+    	corrected_xy = newArray(x, y);
+    	return corrected_xy;
+}
+
+
+
 //Icons used courtesy of: http://www.famfamfam.com/lab/icons/silk/
 //https://github.com/markjames/famfamfam-silk-icons
