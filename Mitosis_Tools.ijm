@@ -531,7 +531,7 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
     		y = old_y_values[i];
     		
 //Correct these values to avoid erors if centre of mask is black
-		corrected_xy = correct_xy(x,y;);
+		corrected_xy = correct_xy(imgTitle, x, y;);
 		x = xorrected_xy[0];
 		y = xorrected_xy[1];
 
@@ -1392,9 +1392,10 @@ function convert_to_mdf2(){
 	print("End of MTrackJ Data File");
 }
 
-function correct_xy(x,y) {
+function correct_xy(imgTitle, x, y) {
 	
 	//make roi
+	selectWindow(imgTitle);
 	drawOval(x,y,20,20);
 	getRawStatistics(nPixels, mean, min, max);
 	run("Find Maxima...", "noise="+max+" output=[Point Selection]");
