@@ -349,7 +349,7 @@ macro "Manual Track Tool - CfffD00D01D02D03D04D05D06D07D0bD0cD0dD0eD0fD10D11D12D
 	
 //get morphology values in array
 	morphology_values = newArray();
-	morphology_values = get_cell_properties(59, 126);
+	morphology_values = get_cell_properties(x, y);
 
 //get morphology
 	cell_area = morphology_values[0];
@@ -531,13 +531,13 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
     		y = old_y_values[i];
     		
 //Correct these values to avoid erors if centre of mask is black
-		corrected_xy = correct_xy(imgTitle, x, y);
-		x = corrected_xy[0];
-		y = corrected_xy[1];
+//		corrected_xy = correct_xy(imgTitle, x, y);
+//		x = corrected_xy[0];
+//		y = corrected_xy[1];
 
 //Get morphology values into array		
     		setSlice(old_frames[i]);
-    		morphology_values = get_cell_properties(x, y);
+    		morphology_values = get_cell_properties(x, y, imgTitle);
 
 //Get morphology
     		new_areas = Array.concat(new_areas, morphology_values[0]);
@@ -1264,7 +1264,7 @@ print("Seed tracks aligned for "+column);
 }
 
 
-function get_cell_properties(x, y) {
+function get_cell_properties(x, y, imgTitle) {
     // Duplicate 
     run("Select None");
     run("Duplicate...", "title=duplicate");
@@ -1294,7 +1294,40 @@ function get_cell_properties(x, y) {
     circ  = getResult("Circ.", 0);
     com_x = getResult("XM", 0);
     com_y = getResult("YM", 0);
+    
+    if (area > 5000) {
+    	corrected_xy = correct_xy(imgTitle, x, y);
+		x = corrected_xy[0];
+		y = corrected_xy[1];
+		
+		// Select ROI
+    doWand(x, y);
 
+    // Clear Results silently (avoid accumulation)
+    if (isOpen("Results")) {
+        selectWindow("Results");
+        run("Clear Results");
+    }
+
+    // Measure
+    run("Measure");
+
+    // Grab values
+    area  = getResult("Area", 0);
+    feret = getResult("Feret", 0);
+    circ  = getResult("Circ.", 0);
+    com_x = getResult("XM", 0);
+    com_y = getResult("YM", 0);
+    }
+	
+	if (area > 5000) {
+	area  = "NaN";
+    feret = "NaN";
+    circ  = "NaN";
+    com_x = "NaN";
+    com_y = "NaN";
+	 }
+	 
     // Clean up
     close();
     run("Select None");
