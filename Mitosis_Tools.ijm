@@ -531,9 +531,9 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
     		y = old_y_values[i];
     		
 //Correct these values to avoid erors if centre of mask is black
-		corrected_xy = correct_xy(imgTitle, x, y;);
-		x = xorrected_xy[0];
-		y = xorrected_xy[1];
+		corrected_xy = correct_xy(imgTitle, x, y);
+		x = corrected_xy[0];
+		y = corrected_xy[1];
 
 //Get morphology values into array		
     		setSlice(old_frames[i]);
