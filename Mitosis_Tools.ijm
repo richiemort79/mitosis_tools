@@ -524,28 +524,51 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
 	new_com_y = newArray();
 
 //Perform measurements in batch mode
-	setBatchMode(true);
+    setBatchMode(true);
 
-	for (i=0; i<old_x_values.length; i++) {
-    		x = old_x_values[i];	
-    		y = old_y_values[i];
-    		//selectWindow(imgTitle);
+    for (i=0; i<old_x_values.length; i++) {
+        x = old_x_values[i];
+        y = old_y_values[i];
 
-//Get morphology values into array		
-    		setSlice(old_frames[i]);
-    		morphology_values = get_cell_properties(x, y, imgTitle);
+        setSlice(old_frames[i]);
 
-//Get morphology
-    		new_areas = Array.concat(new_areas, morphology_values[0]);
-    		new_feret = Array.concat(new_feret, morphology_values[1]);
-    		new_circs = Array.concat(new_circs, morphology_values[2]);
+        // 1) Measure at original (x0,y0)
+        morphology_values = get_cell_properties(x, y);
+        area  = morphology_values[0];
 
-//Get centre of mass 
-    		new_com_x = Array.concat(new_com_x, morphology_values[3]);
-    		new_com_y = Array.concat(new_com_y, morphology_values[4]);
-	}
+        // 2) Only correct if initial area > 5000
+        if (area > 5000) {
+            corrected_xy = correct_xy(imgTitle, x, y);
+            x1 = corrected_xy[0];
+            y1 = corrected_xy[1];
 
-setBatchMode(false);
+            // re-measure after correction
+            morphology_values = get_cell_properties(x1, y1);
+            area  = morphology_values[0];
+
+            // set to corrected coords for any kept outputs
+            x = x1;
+            y = y1;
+        }
+
+        // 3) If still > 5000 after (optional) correction, skip this datapoint
+        if (area > 5000) {
+            new_areas = Array.concat(new_areas, "NaN");
+            new_feret = Array.concat(new_feret, "NaN");
+            new_circs = Array.concat(new_circs, "NaN");
+            new_com_x = Array.concat(new_com_x, "NaN");
+            new_com_y = Array.concat(new_com_y, "NaN");
+        } else {
+            // keep: append measurements and COM, remember original row index
+            new_areas = Array.concat(new_areas, morphology_values[0]);
+            new_feret = Array.concat(new_feret, morphology_values[1]);
+            new_circs = Array.concat(new_circs, morphology_values[2]);
+            new_com_x = Array.concat(new_com_x, morphology_values[3]);
+            new_com_y = Array.concat(new_com_y, morphology_values[4]);
+        }
+    }
+    
+    setBatchMode(false);
 
 //Reopen saved
 	open(dir+"Results.csv");
@@ -1260,7 +1283,7 @@ print("Seed tracks aligned for "+column);
 }
 
 
-function get_cell_properties(x, y, imgTitle) {
+function get_cell_properties(x, y) {
     // Duplicate 
     run("Select None");
     run("Duplicate...", "title=duplicate");
@@ -1290,42 +1313,8 @@ function get_cell_properties(x, y, imgTitle) {
     circ  = getResult("Circ.", 0);
     com_x = getResult("XM", 0);
     com_y = getResult("YM", 0);
-    
-    if (area > 5000) {
-    	corrected_xy = correct_xy(imgTitle, x, y);
-		x = corrected_xy[0];
-		y = corrected_xy[1];
-		
-		// Select ROI
-    doWand(x, y);
-
-    // Clear Results silently (avoid accumulation)
-    if (isOpen("Results")) {
-        selectWindow("Results");
-        run("Clear Results");
-    }
-
-    // Measure
-    run("Measure");
-
-    // Grab values
-    area  = getResult("Area", 0);
-    feret = getResult("Feret", 0);
-    circ  = getResult("Circ.", 0);
-    com_x = getResult("XM", 0);
-    com_y = getResult("YM", 0);
-    }
-	
-	if (area > 5000) {
-	area  = "NaN";
-    feret = "NaN";
-    circ  = "NaN";
-    com_x = "NaN";
-    com_y = "NaN";
-	 }
 	 
     // Clean up
-    selectWindow("duplicate");
     close();
     run("Select None");
 
