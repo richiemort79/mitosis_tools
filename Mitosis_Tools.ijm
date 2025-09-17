@@ -529,11 +529,7 @@ macro "Reanalyze Action Tool - Cad8DccCd54D9bCed8D88C676DdfC7adDd2Cbc5D99CefeD1c
 	for (i=0; i<old_x_values.length; i++) {
     		x = old_x_values[i];	
     		y = old_y_values[i];
-    		
-//Correct these values to avoid erors if centre of mask is black
-//		corrected_xy = correct_xy(imgTitle, x, y);
-//		x = corrected_xy[0];
-//		y = corrected_xy[1];
+    		//selectWindow(imgTitle);
 
 //Get morphology values into array		
     		setSlice(old_frames[i]);
@@ -594,7 +590,7 @@ macro "Data Operations Menu Tool - CfffD00D0eD0fD10D14D15D16D17D18D19D1aD1bD1cD1
 
 //if the results table is empty prompt for a results table - prompt for calibration of image
 		Dialog.create("Please set calibration values");
-		Dialog.addNumber("Time Step (min):", 10);
+		Dialog.addNumber("Time Step (min):", 2);
 		Dialog.addNumber("Scale (um/px):", 0.619);
 		Dialog.show();
 		time_step = Dialog.getNumber();
@@ -1329,6 +1325,7 @@ function get_cell_properties(x, y, imgTitle) {
 	 }
 	 
     // Clean up
+    selectWindow("duplicate");
     close();
     run("Select None");
 
